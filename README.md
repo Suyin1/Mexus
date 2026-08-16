@@ -2,6 +2,9 @@
 
 **M.E.X.U.S. = Multi-agent Execution Unified System**
 
+> **中文版**: [README.zh-CN.md](./README.zh-CN.md) — 界面已汉化的中文说明（含 Windows 使用要点）
+> **Chinese**: see [README.zh-CN.md](./README.zh-CN.md) for a localized version.
+
 Mexus is the execution layer for multi-agent development. It turns scattered CLI AI agents into a unified local system: run them, observe their status, and review their work from one operator console.
 
 
