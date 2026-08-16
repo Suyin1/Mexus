@@ -203,7 +203,11 @@ CLI Agent 进程（node-pty）
 
 ## 中文文档
 
-更详细的文档见 [doc_site 中文文档](./doc_site/docs/zh/index.md)（VitePress，含安装、快速上手、CLI、配置、快捷键、FAQ 等）。
+- **项目文档中心**：[docs/README.md](./docs/README.md) — 按读者分层（AI / 用户 / 开发者 / 维护者）的文档导航
+- **AI Agent 快速接入**：[docs/ai/onboarding.md](./docs/ai/onboarding.md) — 项目地图、协议红线、开发命令
+- **项目分析报告**：[docs/ai/project-analysis.zh-CN.md](./docs/ai/project-analysis.zh-CN.md) — 架构、模块、演进方向与改进建议
+- **用户使用指南**：[docs/users/usage-guide.zh-CN.md](./docs/users/usage-guide.zh-CN.md) — 安装启动、Agent 配置（含多 opencode 管理）、FAQ
+- 更详细的文档见 [doc_site 中文文档](./doc_site/docs/zh/index.md)（VitePress，含安装、快速上手、CLI、配置、快捷键、FAQ 等）
 
 ---
 

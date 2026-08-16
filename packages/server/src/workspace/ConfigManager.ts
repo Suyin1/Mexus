@@ -290,7 +290,8 @@ export class ConfigManager {
 
     const results = await Promise.allSettled(
       agentBins.map(async (agent) => {
-        await execFileAsync('which', [agent.bin], { timeout: 3000 })
+        const whichCmd = process.platform === 'win32' ? 'where' : 'which'
+        await execFileAsync(whichCmd, [agent.bin], { timeout: 3000 })
         return agent
       })
     )
@@ -364,7 +365,8 @@ export class ConfigManager {
         const def = global.agents[agent.key]
         const bin = def?.bin || agent.bin
         try {
-          await execFileAsync('which', [bin], { timeout: 3000 })
+          const whichCmd = process.platform === 'win32' ? 'where' : 'which'
+          await execFileAsync(whichCmd, [bin], { timeout: 3000 })
           return { ...agent, bin, installed: true }
         } catch {
           return { ...agent, bin, installed: false }
