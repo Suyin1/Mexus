@@ -152,6 +152,6 @@ describe('Mission REST routes', () => {
     const response = await fastify.inject({ method: 'GET', url: '/api/missions/..%2Fescape' })
 
     expect(response.statusCode).toBe(400)
-    expect(response.json().error).toMatch(/Invalid Mission name/)
+    expect(response.json().error).toMatch(/无效的 Mission 名称/)
   })
 })

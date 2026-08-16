@@ -105,7 +105,7 @@ describe('mission parsers', () => {
     expect(parsed).toEqual({
       ok: false,
       raw: '## To Claim\n\nTo: Missing | From: Done | Scope: x',
-      error: 'Kanban sections To Claim, In Progress, and Done were not all found.',
+      error: '未找到全部 Kanban 分区（To Claim、In Progress、Done）。',
       tasks: { toClaim: [], inProgress: [], done: [] },
     })
   })
@@ -166,7 +166,7 @@ Scope: parsers
     expect(parseMissionRoundtable(raw)).toEqual({
       ok: false,
       raw,
-      error: 'No roundtable review item blocks found.',
+      error: '未找到 roundtable 评审项区块。',
       items: [],
     })
   })

@@ -558,7 +558,7 @@ export class SessionRecorder {
     // Passive cleanup: prune sessions exceeding retention or max count
     const pruned = SessionRecorder.pruneOldSessions(this.projectDir, this.retentionDays)
     if (pruned > 0) {
-      console.log(`[SessionRecorder] Pruned ${pruned} old session(s)`)
+      console.log(`[SessionRecorder] 已清理 ${pruned} 个旧会话`)
     }
   }
 }

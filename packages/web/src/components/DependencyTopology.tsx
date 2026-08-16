@@ -26,11 +26,11 @@ import { getPaneColorById } from './AgentIcon'
 export type ViewMode = 'agent' | 'directory' | 'dependency' | 'conflicts' | 'files'
 
 export const VIEW_MODE_META: Record<ViewMode, { label: string; desc: string }> = {
-  agent:      { label: 'Agent',       desc: 'Agent performance dashboard' },
+  agent:      { label: 'Agent',       desc: 'Agent 性能仪表盘' },
   directory:  { label: 'Modules',     desc: 'Module / directory structure' },
   dependency: { label: 'Imports',     desc: 'Import / dependency relationships' },
   conflicts:  { label: 'Conflicts',   desc: 'Active conflict detection' },
-  files:      { label: 'Files',       desc: 'All changed files with agent attribution' },
+  files:      { label: '文件',       desc: '所有变更文件及 Agent 归属' },
 }
 
 // ─── Module-level panes ref for node component color lookups ─
@@ -607,7 +607,7 @@ function DirNodeComponent({ data }: { data: DirNodeData }) {
 
       {/* Row 1: Dir name + file count + modified badge */}
       <div style={{ display: 'flex', alignItems: 'center', gap: 5 }}>
-        {data.conflict && <span style={{ fontSize: 10, lineHeight: 1, flexShrink: 0 }} title="Multiple agents operating here">⚠</span>}
+        {data.conflict && <span style={{ fontSize: 10, lineHeight: 1, flexShrink: 0 }} title="多个 Agent 在此操作">⚠</span>}
         <span style={{ fontSize: 12, fontWeight: 700, color: 'var(--text-primary)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1 }}>
           {data.label}
         </span>

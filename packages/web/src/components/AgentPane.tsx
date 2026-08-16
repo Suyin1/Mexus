@@ -148,10 +148,10 @@ export const AgentPane = memo(function AgentPane({ pane, paneIndex, paneColor: p
                   autoFocus
                   className="pane-title-input"
                 />
-                <button type="submit" className="pane-action-btn" title="Save title" data-tooltip="Save title">
+                <button type="submit" className="pane-action-btn" title="保存标题" data-tooltip="保存标题">
                   <Check size={13} />
                 </button>
-                <button type="button" onClick={handleCancelRename} className="pane-action-btn" title="Cancel title edit" data-tooltip="Cancel title edit">
+                <button type="button" onClick={handleCancelRename} className="pane-action-btn" title="取消标题编辑" data-tooltip="取消标题编辑">
                   <X size={13} />
                 </button>
               </form>
@@ -171,8 +171,8 @@ export const AgentPane = memo(function AgentPane({ pane, paneIndex, paneColor: p
             {!isEditingName && (
               <button
                 onClick={handleStartRename}
-                title="Edit title"
-                data-tooltip="Edit title"
+                title="编辑标题"
+                data-tooltip="编辑标题"
                 className="pane-action-btn"
               >
                 <Pencil size={13} />
@@ -182,8 +182,8 @@ export const AgentPane = memo(function AgentPane({ pane, paneIndex, paneColor: p
             {pane.isolation === 'worktree' && diffCount > 0 && (
               <button
                 onClick={handleMerge}
-                title={`Merge ${pane.branch || 'branch'} into base branch`}
-                data-tooltip={`Merge ${pane.branch || 'branch'} into base branch`}
+                title={`将 ${pane.branch || '分支'} 合并到基础分支`}
+                data-tooltip={`将 ${pane.branch || '分支'} 合并到基础分支`}
                 className="pane-action-btn"
                 style={{ color: 'var(--status-waiting)' }}
               >
@@ -195,11 +195,11 @@ export const AgentPane = memo(function AgentPane({ pane, paneIndex, paneColor: p
               <button
                 onClick={handleResume}
                 title={hasSessionId
-                  ? `Resume session ${(pane.meta.sessionId || pane.sessionId || '').slice(0, 12)}`
-                  : 'Resume session'}
+                  ? `恢复会话 ${(pane.meta.sessionId || pane.sessionId || '').slice(0, 12)}`
+                  : '恢复会话'}
                 data-tooltip={hasSessionId
-                  ? `Resume session ${(pane.meta.sessionId || pane.sessionId || '').slice(0, 12)}`
-                  : 'Resume session'}
+                  ? `恢复会话 ${(pane.meta.sessionId || pane.sessionId || '').slice(0, 12)}`
+                  : '恢复会话'}
                 className="pane-action-btn"
                 style={{
                   display: 'flex',
@@ -213,32 +213,32 @@ export const AgentPane = memo(function AgentPane({ pane, paneIndex, paneColor: p
             )}
             <button
               onClick={handleInterrupt}
-              title="Send Ctrl+C (interrupt)"
-              data-tooltip="Send Ctrl+C (interrupt)"
+              title="发送 Ctrl+C（中断）"
+              data-tooltip="发送 Ctrl+C（中断）"
               className="pane-action-btn"
             >
               <Square className="icon-sm" style={{ color: 'var(--text-muted)' }} />
             </button>
             <button
               onClick={handleRestart}
-              title="Restart (new session)"
-              data-tooltip="Restart (new session)"
+              title="重启（新会话）"
+              data-tooltip="重启（新会话）"
               className="pane-action-btn"
             >
               <RotateCcw className="icon-sm" style={{ color: 'var(--text-muted)' }} />
             </button>
             <button
               onClick={handleClose}
-              title="Close"
-              data-tooltip="Close"
+              title="关闭"
+              data-tooltip="关闭"
               className="pane-action-btn"
             >
               <X className="icon-sm" style={{ color: 'var(--text-muted)' }} />
             </button>
             <button
               onClick={handleTogglePin}
-              title={isPinned ? 'Unpin from top' : 'Pin to top'}
-              data-tooltip={isPinned ? 'Unpin from top' : 'Pin to top'}
+              title={isPinned ? '取消置顶' : '置顶'}
+              data-tooltip={isPinned ? '取消置顶' : '置顶'}
               className={`pane-action-btn ${isPinned ? 'pane-action-btn--active' : ''}`}
             >
               <Pin size={13} fill={isPinned ? 'currentColor' : 'none'} />

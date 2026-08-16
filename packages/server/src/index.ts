@@ -26,7 +26,7 @@ import type { GlobalConfig, ModelDefinition, ModelProviderConfig } from './types
 const __dirname = path.dirname(fileURLToPath(import.meta.url))
 
 export function formatStartupMessage(port: number): string {
-  return `Mexus running on http://localhost:${port}`
+  return `Mexus 正在运行，地址 http://localhost:${port}`
 }
 
 export async function startServer(port: number, projectDir: string) {
@@ -101,20 +101,20 @@ export async function startServer(port: number, projectDir: string) {
   try {
     await fsWatcher.start()
   } catch (err) {
-    console.warn('[FsWatcher] Failed to start file watcher:', (err as Error).message)
+    console.warn('[FsWatcher] 启动文件监听失败:', (err as Error).message)
   }
 
   try {
     await gitService.start()
   } catch (err) {
-    console.warn('[GitService] Failed to start git service:', (err as Error).message)
+    console.warn('[GitService] 启动 Git 服务失败:', (err as Error).message)
   }
 
   // WebSocket
   await fastify.register(fastifyWebsocket)
 
   fastify.get('/nexus-ws', { websocket: true }, (socket, req) => {
-    console.log('[WS] Upgrade request from', req.ip)
+    console.log('[WS] 升级请求来自', req.ip)
     try {
       setupWsHandlers(socket, workspaceManager, gitService)
 
@@ -123,16 +123,16 @@ export async function startServer(port: number, projectDir: string) {
       // panel) so closed-panel sessions don't get hit with a large payload.
       const tree = fsWatcher.getTree()
       socket.send(JSON.stringify({ type: 'fs.tree', tree }))
-      console.log('[WS] Client connected')
+      console.log('[WS] 客户端已连接')
 
       socket.on('close', (code: number, reason: Buffer) => {
         console.log(`[WS] Client disconnected: code=${code} reason=${reason.toString()}`)
       })
       socket.on('error', (err: Error) => {
-        console.error('[WS] Socket error:', err)
+        console.error('[WS] 套接字错误:', err)
       })
     } catch (err) {
-      console.error('[WS] Error in connection handler:', err)
+      console.error('[WS] 连接处理器错误:', err)
     }
   })
 
@@ -143,7 +143,7 @@ export async function startServer(port: number, projectDir: string) {
 
   // Remote shutdown (used by Mexus Hub)
   fastify.post('/api/shutdown', async () => {
-    console.log('[Shutdown] Requested via POST /api/shutdown')
+    console.log('[Shutdown] 已通过 POST /api/shutdown 请求关闭')
     setTimeout(() => shutdown('api'), 50)
     return { ok: true }
   })
@@ -165,7 +165,7 @@ export async function startServer(port: number, projectDir: string) {
       return { success: true }
     } catch (err) {
       reply.code(400)
-      return { error: 'Invalid config' }
+      return { error: '无效的配置' }
     }
   })
 
@@ -226,14 +226,14 @@ export async function startServer(port: number, projectDir: string) {
   fastify.get('/api/replay/sessions/:sessionId', async (request, reply) => {
     const { sessionId } = request.params as { sessionId: string }
     const session = SessionRecorder.getSession(projectDir, sessionId)
-    if (!session) { reply.code(404); return { error: 'Session not found' } }
+    if (!session) { reply.code(404); return { error: '未找到会话' } }
     return session
   })
 
   fastify.get('/api/replay/sessions/:sessionId/turns/:turnId', async (request, reply) => {
     const { sessionId, turnId } = request.params as { sessionId: string; turnId: string }
     const turn = SessionRecorder.getTurn(projectDir, sessionId, turnId)
-    if (!turn) { reply.code(404); return { error: 'Turn not found' } }
+    if (!turn) { reply.code(404); return { error: '未找到回合' } }
     return turn
   })
 
@@ -270,13 +270,13 @@ export async function startServer(port: number, projectDir: string) {
     const { path: filePath } = request.query as { path?: string }
     if (!filePath) {
       reply.code(400)
-      return { error: 'Missing path parameter' }
+      return { error: '缺少路径参数' }
     }
 
     // Security: reject paths with .. or absolute paths
     if (filePath.includes('..') || path.isAbsolute(filePath)) {
       reply.code(403)
-      return { error: 'Invalid path' }
+      return { error: '无效的路径' }
     }
 
     const fullPath = path.resolve(projectDir, filePath)
@@ -284,7 +284,7 @@ export async function startServer(port: number, projectDir: string) {
     // Ensure resolved path is within projectDir
     if (!fullPath.startsWith(projectDir)) {
       reply.code(403)
-      return { error: 'Path traversal not allowed' }
+      return { error: '不允许的路径穿越' }
     }
 
     try {
@@ -292,7 +292,7 @@ export async function startServer(port: number, projectDir: string) {
       return { content, path: filePath }
     } catch {
       reply.code(404)
-      return { error: 'File not found' }
+      return { error: '未找到文件' }
     }
   })
 
@@ -301,20 +301,20 @@ export async function startServer(port: number, projectDir: string) {
     const { path: filePath } = request.query as { path?: string }
     if (!filePath) {
       reply.code(400)
-      return { error: 'Missing path parameter' }
+      return { error: '缺少路径参数' }
     }
     if (filePath.includes('..') || path.isAbsolute(filePath)) {
       reply.code(403)
-      return { error: 'Invalid path' }
+      return { error: '无效的路径' }
     }
     const fullPath = path.resolve(projectDir, filePath)
     if (!fullPath.startsWith(projectDir)) {
       reply.code(403)
-      return { error: 'Path traversal not allowed' }
+      return { error: '不允许的路径穿越' }
     }
     if (!fs.existsSync(fullPath)) {
       reply.code(404)
-      return { error: 'File not found' }
+      return { error: '未找到文件' }
     }
     const ext = path.extname(fullPath).toLowerCase()
     const mimeMap: Record<string, string> = {
@@ -351,15 +351,15 @@ export async function startServer(port: number, projectDir: string) {
       return { success: true }
     } catch (err) {
       reply.code(400)
-      return { error: 'Failed to save notes' }
+      return { error: '保存笔记失败' }
     }
   })
 
   // Serve static frontend in production
   const webDistPath = path.resolve(__dirname, '../../web/dist')
   if (!fs.existsSync(webDistPath)) {
-    console.warn(`  [Warning] Frontend not found at ${webDistPath}`)
-    console.warn(`  Run 'pnpm run build:web' to build the frontend, or use dev mode.`)
+    console.warn(`  [警告] 未找到前端资源，路径 ${webDistPath}`)
+    console.warn(`  请运行 'pnpm run build:web' 构建前端，或使用开发模式。`)
   }
   if (fs.existsSync(webDistPath)) {
     await fastify.register(fastifyStatic, {
@@ -382,7 +382,7 @@ export async function startServer(port: number, projectDir: string) {
   const shutdown = async (source: string) => {
     if (shuttingDown) return
     shuttingDown = true
-    console.log(`\nShutting down... source=${source}`)
+    console.log(`\n正在关闭... 来源=${source}`)
     markStoppedByPid(process.pid)
     recorder.flush()
     agentsWriter.flush(workspaceManager.getPanes())
@@ -400,9 +400,9 @@ export async function startServer(port: number, projectDir: string) {
     await fastify.listen({ port, host: '0.0.0.0' })
   } catch (err: unknown) {
     if ((err as NodeJS.ErrnoException).code === 'EADDRINUSE') {
-      console.error(`Port ${port} is already in use. Kill the existing process or use a different port:`)
+      console.error(`端口 ${port} 已被占用。请结束现有进程或使用其他端口:`)
       console.error(`  NEXUS_PORT=7800 pnpm dev`)
-      console.error(`  # or find and kill: lsof -i :${port}`)
+      console.error(`  # 或查找并结束进程: lsof -i :${port}`)
       process.exit(1)
     }
     throw err

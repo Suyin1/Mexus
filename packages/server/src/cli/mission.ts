@@ -30,13 +30,13 @@ export async function runMissionCommand(args: string[], serverUrl: string, clien
       await validateMission(rest, serverUrl, client, io)
       return
     default:
-      throw new CliError('Usage: mexus mission <list|active|activate|archive|validate>')
+      throw new CliError('用法: mexus mission <list|active|activate|archive|validate>')
   }
 }
 
 async function listMissions(args: string[], serverUrl: string, client: CliHttpClient, io: CliIo): Promise<void> {
   const json = takeFlag(args, '--json')
-  if (args.length > 0) throw new CliError(`Unknown mission list argument: ${args[0]}`)
+  if (args.length > 0) throw new CliError(`未知的 mission list 参数: ${args[0]}`)
   const response = await requestJson<MissionListResponse>(client, `${serverUrl}/api/missions`)
   if (json) {
     printJson(io, response)
@@ -49,7 +49,7 @@ async function listMissions(args: string[], serverUrl: string, client: CliHttpCl
 
 async function activeMission(args: string[], serverUrl: string, client: CliHttpClient, io: CliIo): Promise<void> {
   const json = takeFlag(args, '--json')
-  if (args.length > 0) throw new CliError(`Unknown mission active argument: ${args[0]}`)
+  if (args.length > 0) throw new CliError(`未知的 mission active 参数: ${args[0]}`)
   const response = await requestJson<MissionDetail>(client, `${serverUrl}/api/missions/active`)
   if (json) {
     printJson(io, response)
@@ -59,22 +59,22 @@ async function activeMission(args: string[], serverUrl: string, client: CliHttpC
 }
 
 async function activateMission(args: string[], serverUrl: string, client: CliHttpClient, io: CliIo): Promise<void> {
-  const name = requireArg(args[0], 'Missing Mission name')
-  if (args.length > 1) throw new CliError(`Unknown mission activate argument: ${args[1]}`)
+  const name = requireArg(args[0], '缺少 Mission 名称')
+  if (args.length > 1) throw new CliError(`未知的 mission activate 参数: ${args[1]}`)
   const response = await requestJson<MissionDetail>(client, `${serverUrl}/api/missions/${encodeURIComponent(name)}/activate`, { method: 'POST' })
-  io.stdout(`Activated Mission ${response.summary.name}`)
+  io.stdout(`已激活 Mission ${response.summary.name}`)
 }
 
 async function archiveMission(args: string[], serverUrl: string, client: CliHttpClient, io: CliIo): Promise<void> {
   const force = takeFlag(args, '--force')
-  const name = requireArg(args[0], 'Missing Mission name')
-  if (args.length > 1) throw new CliError(`Unknown mission archive argument: ${args[1]}`)
+  const name = requireArg(args[0], '缺少 Mission 名称')
+  if (args.length > 1) throw new CliError(`未知的 mission archive 参数: ${args[1]}`)
 
   if (!force) {
     const panes = await requestJson<PaneListResponse>(client, `${serverUrl}/api/panes?mission=${encodeURIComponent(name)}`)
     const running = panes.panes.filter((pane) => pane.status === 'running')
     if (running.length > 0) {
-      throw new CliError(`Mission has running panes: ${running.map((pane) => pane.id).join(', ')}. Re-run with --force to close them.`)
+      throw new CliError(`Mission 存在运行中的执行面板: ${running.map((pane) => pane.id).join(', ')}。请使用 --force 重新运行以关闭它们。`)
     }
   }
 
@@ -82,32 +82,32 @@ async function archiveMission(args: string[], serverUrl: string, client: CliHttp
     method: 'POST',
     body: JSON.stringify({ force }),
   })
-  io.stdout(`Archived Mission ${response.name} to ${response.path}`)
+  io.stdout(`已将 Mission ${response.name} 归档至 ${response.path}`)
 }
 
 async function validateMission(args: string[], serverUrl: string, client: CliHttpClient, io: CliIo): Promise<void> {
   const json = takeFlag(args, '--json')
-  const name = requireArg(args[0], 'Missing Mission name')
-  if (args.length > 1) throw new CliError(`Unknown mission validate argument: ${args[1]}`)
+  const name = requireArg(args[0], '缺少 Mission 名称')
+  if (args.length > 1) throw new CliError(`未知的 mission validate 参数: ${args[1]}`)
 
   const mission = await requestJson<MissionDetail>(client, `${serverUrl}/api/missions/${encodeURIComponent(name)}`)
   const required = ['mission', 'agents', 'kanban', 'roundtable', 'squadLead'] as const
   const errors: string[] = []
   for (const key of required) {
-    if (!mission.files[key]?.exists) errors.push(`Missing required file: ${mission.files[key]?.path || key}`)
+    if (!mission.files[key]?.exists) errors.push(`缺少必需文件: ${mission.files[key]?.path || key}`)
   }
   const kanban = parseMissionKanban(mission.files.kanban?.raw || '')
-  if (!kanban.ok) errors.push(`Invalid kanban.md: ${kanban.error}`)
+  if (!kanban.ok) errors.push(`无效的 kanban.md: ${kanban.error}`)
   const roundtable = parseMissionRoundtable(mission.files.roundtable?.raw || '')
-  if (!roundtable.ok) errors.push(`Invalid roundtable.md: ${roundtable.error}`)
+  if (!roundtable.ok) errors.push(`无效的 roundtable.md: ${roundtable.error}`)
 
   const report = { ok: errors.length === 0, mission: name, errors }
   if (json) {
     printJson(io, report)
   } else if (report.ok) {
-    io.stdout(`Mission ${name} is valid`)
+    io.stdout(`Mission ${name} 校验通过`)
   } else {
     for (const error of errors) io.stderr(error)
   }
-  if (!report.ok) throw new CliError(`Mission ${name} is invalid`)
+  if (!report.ok) throw new CliError(`Mission ${name} 校验未通过`)
 }

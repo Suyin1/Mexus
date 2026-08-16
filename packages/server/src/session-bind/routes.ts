@@ -40,7 +40,7 @@ function stringField(value: unknown): string | undefined {
 function rejectNonLocal(request: FastifyRequest, reply: FastifyReply): boolean {
   if (isLocal(request)) return false
   reply.code(403)
-  reply.send({ error: 'forbidden: non-local origin' })
+  reply.send({ error: '禁止访问：非本地来源' })
   return true
 }
 
@@ -54,7 +54,7 @@ export function registerSessionBindRoute(
     const token = request.headers['x-mexus-token']
     if (typeof token !== 'string' || token.length === 0) {
       reply.code(401)
-      return { error: 'missing X-Mexus-Token' }
+      return { error: '缺少 X-Mexus-Token' }
     }
 
     const body = (request.body ?? {}) as BindBody
@@ -65,16 +65,16 @@ export function registerSessionBindRoute(
 
     if (!paneId) {
       reply.code(400)
-      return { error: 'paneId required' }
+      return { error: '缺少 paneId' }
     }
     if (!sessionId) {
       reply.code(400)
-      return { error: 'sessionId required' }
+      return { error: '缺少 sessionId' }
     }
 
     if (!module.tokens.consume(paneId, token)) {
       reply.code(401)
-      return { error: 'invalid or already-used token' }
+      return { error: '无效或已使用的 token' }
     }
 
     module.sessions.set({
@@ -103,7 +103,7 @@ export function registerSessionBindRoute(
       const paneId = stringField(body.paneId)
       if (!paneId) {
         reply.code(400)
-        return { error: 'paneId required' }
+        return { error: '缺少 paneId' }
       }
       const token = module.tokens.issue(paneId)
       return { token }

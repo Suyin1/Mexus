@@ -76,7 +76,7 @@ describe('CLI pane subcommands', () => {
       isolation: 'shared',
       yolo: true,
     }))
-    expect(output.stdout).toEqual(['Created pane pane-1: Bael'])
+    expect(output.stdout).toEqual(['已创建执行面板 pane-1: Bael'])
   })
 
   it('lists panes as JSON with a Mission filter', async () => {
@@ -126,7 +126,7 @@ describe('CLI mission subcommands', () => {
       method: 'POST',
       body: JSON.stringify({ force: true }),
     }))
-    expect(output.stdout).toEqual(['Archived Mission demo to agent-team/missions/_archived/demo'])
+    expect(output.stdout).toEqual(['已将 Mission demo 归档至 agent-team/missions/_archived/demo'])
   })
 
   it('validates Mission files and prints a JSON error report', async () => {
@@ -152,8 +152,8 @@ describe('CLI mission subcommands', () => {
     const report = JSON.parse(output.stdout[0])
     expect(report.ok).toBe(false)
     expect(report.errors).toEqual(expect.arrayContaining([
-      'Missing required file: agents.md',
-      'Missing required file: squad-lead.md',
+      '缺少必需文件: agents.md',
+      '缺少必需文件: squad-lead.md',
     ]))
   })
 
@@ -167,6 +167,6 @@ describe('CLI mission subcommands', () => {
       env: {},
       httpClient: { fetch },
       io: io().io,
-    })).rejects.toThrow(/Mexus server not running - start it with `mexus start`/)
+    })).rejects.toThrow(/Mexus 服务未运行 - 请使用 `mexus start` 启动/)
   })
 })

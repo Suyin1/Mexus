@@ -90,14 +90,14 @@ export function BottomTerminalHeader({
       }}
     >
       <TerminalIcon className="icon-sm" style={{ color: 'var(--text-primary)' }} />
-      <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-primary)', fontWeight: 600 }}>Terminal</span>
+      <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-primary)', fontWeight: 600 }}>终端</span>
       <div style={{ marginLeft: 'var(--space-lg)', minWidth: 0 }}>
         {airline}
       </div>
-      <button type="button" className="pane-action-btn bottom-terminal-instance-action" title="Minimize terminal" aria-label="Minimize terminal" data-label="Minimize" onClick={onClose}>
+      <button type="button" className="pane-action-btn bottom-terminal-instance-action" title="最小化终端" aria-label="最小化终端" data-label="最小化" onClick={onClose}>
         <ChevronDown className="icon-xs" style={{ color: 'var(--text-secondary)' }} />
       </button>
-      <button type="button" className="pane-action-btn bottom-terminal-instance-action" title={isMaximized ? 'Restore terminal' : 'Maximize terminal'} aria-label={isMaximized ? 'Restore terminal' : 'Maximize terminal'} data-label={isMaximized ? 'Restore' : 'Maximize'} onClick={onToggleMaximize} style={{ marginLeft: 'auto' }}>
+      <button type="button" className="pane-action-btn bottom-terminal-instance-action" title={isMaximized ? '恢复终端' : '最大化终端'} aria-label={isMaximized ? '恢复终端' : '最大化终端'} data-label={isMaximized ? '恢复' : '最大化'} onClick={onToggleMaximize} style={{ marginLeft: 'auto' }}>
         {isMaximized ? (
           <Minimize2 className="icon-xs" style={{ color: 'var(--accent-primary)' }} />
         ) : (
@@ -229,7 +229,7 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
   useEffect(() => {
     const handleCreateFailed = (e: Event) => {
       const { message } = (e as CustomEvent<{ message: string }>).detail
-      setCreateError(message || 'Failed to create shell')
+      setCreateError(message || '创建 Shell 失败')
     }
     window.addEventListener('nexus-pane-create-failed', handleCreateFailed)
     return () => window.removeEventListener('nexus-pane-create-failed', handleCreateFailed)
@@ -248,7 +248,7 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
     setCreateError(null)
     if (connectionStatus !== 'connected') {
       debugLog('bottom-terminal', 'createShellPane:blocked-disconnected', { name, connectionStatus })
-      setCreateError(`Cannot create shell while server is ${connectionStatus}`)
+      setCreateError(`服务器当前状态为 ${connectionStatus}，无法创建 Shell`)
       return
     }
     if (command) {
@@ -376,7 +376,7 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
         {basename(projectDir)}
       </AirSegment>
       {separator}
-      <AirSegment color="var(--text-muted)" title={gitBranchInfo?.remote ? `${gitBranchInfo.branch} -> ${gitBranchInfo.remote}` : gitBranchInfo?.branch || 'No git branch'}>
+      <AirSegment color="var(--text-muted)" title={gitBranchInfo?.remote ? `${gitBranchInfo.branch} -> ${gitBranchInfo.remote}` : gitBranchInfo?.branch || '无 Git 分支'}>
         <GitBranch style={{ width: 12, height: 12 }} />
         {gitBranchInfo?.branch || 'no-git'}
         {gitBranchInfo && gitBranchInfo.ahead > 0 && <span>+{gitBranchInfo.ahead}</span>}
@@ -420,9 +420,9 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
           <button
             type="button"
             className="pane-action-btn bottom-terminal-instance-action"
-            title="New terminal"
-            aria-label="New terminal"
-            data-label="New shell"
+            title="新建终端"
+            aria-label="新建终端"
+            data-label="新建 Shell"
             onMouseDown={(event) => {
               event.preventDefault()
               event.stopPropagation()
@@ -438,10 +438,10 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
           </button>
           {activeShellPaneId && (
             <>
-              <button type="button" className="pane-action-btn bottom-terminal-instance-action" title="Interrupt current command" aria-label="Interrupt current command" data-label="Interrupt" onClick={() => send({ type: 'terminal.input', paneId: activeShellPaneId, data: '\u0003' })}>
+              <button type="button" className="pane-action-btn bottom-terminal-instance-action" title="中断当前命令" aria-label="中断当前命令" data-label="中断" onClick={() => send({ type: 'terminal.input', paneId: activeShellPaneId, data: '\u0003' })}>
                 <Square className="icon-xs" style={{ color: 'var(--text-secondary)' }} />
               </button>
-              <button type="button" className="pane-action-btn bottom-terminal-instance-action" title="Clear terminal" aria-label="Clear terminal" data-label="Clear" onClick={() => send({ type: 'terminal.input', paneId: activeShellPaneId, data: 'clear\r' })}>
+              <button type="button" className="pane-action-btn bottom-terminal-instance-action" title="清空终端" aria-label="清空终端" data-label="清空" onClick={() => send({ type: 'terminal.input', paneId: activeShellPaneId, data: 'clear\r' })}>
                 <Eraser className="icon-xs" style={{ color: 'var(--text-secondary)' }} />
               </button>
             </>
@@ -525,7 +525,7 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
                 <button
                   type="button"
                   className="shell-row-action"
-                  title="Rename terminal"
+                  title="重命名终端"
                   onClick={(e) => {
                     e.stopPropagation()
                     beginRename(pane.id, pane.name)
@@ -537,7 +537,7 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
               <button
                 type="button"
                 className="shell-row-action"
-                title="Close terminal"
+                title="关闭终端"
                 onClick={(e) => {
                   e.stopPropagation()
                   handleCloseShell(pane.id)
@@ -576,7 +576,7 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
         onClick={handleOpen}
       >
         <TerminalIcon className="icon-sm" style={{ color: 'var(--text-primary)' }} />
-        <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-primary)', fontWeight: 600 }}>Terminal</span>
+        <span style={{ fontSize: 'var(--font-sm)', color: 'var(--text-primary)', fontWeight: 600 }}>终端</span>
         <div style={{ marginLeft: 'var(--space-lg)', minWidth: 0 }}>
           {renderAirline()}
         </div>
@@ -603,7 +603,7 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
       <div
         className="bottom-terminal-resize-hitbox"
         onPointerDown={handleResizePointerDown}
-        title="Drag to resize terminal"
+        title="拖拽调整终端大小"
       />
       {/* Header bar */}
       <BottomTerminalHeader
@@ -678,7 +678,7 @@ export function BottomTerminal({ send }: BottomTerminalProps) {
                   fontSize: 'var(--font-sm)',
                 }}
               >
-                No terminal instances
+                暂无终端实例
               </div>
             )}
           </div>

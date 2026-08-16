@@ -217,7 +217,7 @@ export function ConflictsPanel() {
         }}
       >
         <CheckCircle2 size={32} style={{ color: '#3FB950' }} />
-        <span style={{ fontSize: 13 }}>No conflicts detected</span>
+        <span style={{ fontSize: 13 }}>未检测到冲突</span>
       </div>
     )
   }

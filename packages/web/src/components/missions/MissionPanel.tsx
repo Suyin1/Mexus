@@ -65,24 +65,24 @@ export function startMissionDetailAutoRefresh({
 
 export const MISSION_ONBOARDING_KANBAN_COLUMNS = [
   {
-    title: 'To Claim',
+    title: '待领取',
     cards: [
-      'Define the Mission shell',
-      'Publish agent implementation tasks',
+      '定义 Mission 框架',
+      '发布 Agent 实现任务',
     ],
   },
   {
-    title: 'In Progress',
+    title: '进行中',
     cards: [
       'Build Team observation UI',
       'Wire Mission lifecycle state',
     ],
   },
   {
-    title: 'Done',
+    title: '已完成',
     cards: [
-      'Review parser fallback behavior',
-      'Accept completed Mission work',
+      '审查解析器降级行为',
+      '验收已完成的 Mission 工作',
     ],
   },
 ]
@@ -90,11 +90,11 @@ export const MISSION_ONBOARDING_KANBAN_COLUMNS = [
 export const MISSION_ONBOARDING_AGENTS = [
   {
     name: 'Squad Lead',
-    role: 'Mission decomposition and task review',
+    role: 'Mission 拆解与任务审查',
   },
   {
     name: 'Implementation Agent',
-    role: 'Scoped task execution in workspace files',
+    role: '在工作区文件中执行范围内任务',
   },
 ]
 
@@ -146,7 +146,7 @@ function ObservationShell() {
         padding: 12,
         overflow: 'auto',
       }}>
-        <div className="mission-tabs" role="tablist" aria-label="Mission observation views">
+        <div className="mission-tabs" role="tablist" aria-label="Mission 观测视图">
           <button
             type="button"
             role="tab"
@@ -163,7 +163,7 @@ function ObservationShell() {
             className={`mission-tab ${activeTab === 'agents' ? 'mission-tab--active' : ''}`}
             onClick={() => setActiveTab('agents')}
           >
-            Mission Agents
+            Mission 成员
           </button>
           <button
             type="button"
@@ -172,7 +172,7 @@ function ObservationShell() {
             className={`mission-tab ${activeTab === 'squad-log' ? 'mission-tab--active' : ''}`}
             onClick={() => setActiveTab('squad-log')}
           >
-            Squad Lead Log
+            Squad Lead 日志
           </button>
         </div>
 
@@ -192,29 +192,29 @@ function MissionOnboarding({ showEnableAgentTeamBanner }: { showEnableAgentTeamB
       {showEnableAgentTeamBanner && <EnableAgentTeamBanner />}
       <div className="mission-onboarding-intro">
         <div>
-          <div className="mission-onboarding-kicker">Team Workspace</div>
-          <h2>Coordinate Mission work from Markdown-backed files.</h2>
+          <div className="mission-onboarding-kicker">团队工作区</div>
+          <h2>通过 Markdown 文件协调 Mission 工作。</h2>
           <p>
             The Team tab observes Mission state from `mission.md`, `kanban.md`, and `agents.md`: Squad Lead pane creation,
-            Kanban progress, Mission Agents, lifecycle, and review counts stay visible beside the Hub workspace.
+            Kanban progress, Mission 成员, lifecycle, and review counts stay visible beside the Hub workspace.
           </p>
         </div>
       </div>
 
-      <div className="mission-onboarding-preview" aria-label="Preview of Mission layout">
+      <div className="mission-onboarding-preview" aria-label="Mission 布局预览">
         <section className="mission-onboarding-overview">
           <div className="mission-onboarding-overview-title">
             <ClipboardList className="icon-sm" />
             <div>
-              <strong>Mission overview</strong>
+              <strong>Mission 概览</strong>
               <span>active - 2026-05-06</span>
             </div>
           </div>
           <div className="mission-onboarding-stats">
-            <span>To Claim 2</span>
-            <span>In Progress 2</span>
-            <span>Done 2</span>
-            <span>Unreviewed 1</span>
+            <span>待领取 2</span>
+            <span>进行中 2</span>
+            <span>已完成 2</span>
+            <span>未审查 1</span>
           </div>
         </section>
 
@@ -229,7 +229,7 @@ function MissionOnboarding({ showEnableAgentTeamBanner }: { showEnableAgentTeamB
                 {column.cards.map((card) => (
                   <article className="mission-onboarding-card" key={card}>
                     <strong>{card}</strong>
-                    <p>Example task card shown only as a preview.</p>
+                    <p>示例任务卡片，仅作预览展示。</p>
                   </article>
                 ))}
               </div>
@@ -292,7 +292,7 @@ export function MissionPanel() {
       {showInitialLoading && (
         <CenterState
           icon={<Loader2 className="icon-hero" style={{ color: 'var(--accent-primary)' }} />}
-          title="Loading Missions"
+          title="加载 Mission 中"
           detail="Reading Mission files from the connected workspace."
         />
       )}
@@ -302,7 +302,7 @@ export function MissionPanel() {
       {!showInitialLoading && selectedMission?.incomplete && (
         <CenterState
           icon={<AlertTriangle className="icon-hero" style={{ color: '#F0883E' }} />}
-          title="Incomplete Mission"
+          title="未完成的 Mission"
           detail={selectedMission.missingFiles?.length ? `Missing files: ${selectedMission.missingFiles.join(', ')}` : 'This Mission is missing one or more required files.'}
         />
       )}

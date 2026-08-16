@@ -81,7 +81,7 @@ export class GitService {
       this.notifyListeners()
     } catch (err) {
       if ((err as Error).message === 'git diff timeout') {
-        console.warn('[GitService] git diff timed out (15s), using cached result')
+        console.warn('[GitService] git diff 超时（15 秒），使用缓存结果')
       }
       // Other git failures also silently use cached result
     }

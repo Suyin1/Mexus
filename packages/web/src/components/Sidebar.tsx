@@ -64,17 +64,17 @@ export function Sidebar({ onAddPane, onOpenSettings, onOpenReplay, onOpenNotes }
     >
       <SidebarButton
         icon={<Plus className="sidebar-icon" />}
-        title="Create execution pane"
+        title="创建执行面板"
         onClick={onAddPane}
       />
       <SidebarButton
         icon={<History className="sidebar-icon" />}
-        title="Replay History"
+        title="回放历史"
         onClick={onOpenReplay}
       />
       <SidebarButton
         icon={<StickyNote className="sidebar-icon" />}
-        title="Notes"
+        title="笔记"
         onClick={onOpenNotes}
       />
 
@@ -83,7 +83,7 @@ export function Sidebar({ onAddPane, onOpenSettings, onOpenReplay, onOpenNotes }
       <div style={{ marginBottom: 'var(--space-lg)' }}>
         <SidebarButton
           icon={<Settings className="sidebar-icon" />}
-          title="Settings (⌘,)"
+          title="设置 (⌘,)"
           onClick={onOpenSettings}
         />
       </div>

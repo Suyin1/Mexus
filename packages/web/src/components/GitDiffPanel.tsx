@@ -219,16 +219,16 @@ function DiffFileItem({ diff, mode, onStage, onUnstage, onDiscard, isReviewed, o
           {onToggleReviewed && (
             <ActionButton
               icon={isReviewed ? EyeOff : Eye}
-              title={isReviewed ? 'Mark as unreviewed' : 'Mark as reviewed'}
+              title={isReviewed ? '标记为未审查' : '标记为已审查'}
               onClick={(e) => { e.stopPropagation(); onToggleReviewed() }}
               color={isReviewed ? 'var(--status-running)' : 'var(--text-muted)'}
             />
           )}
-          <ActionButton icon={ExternalLink} title="Open file" onClick={handleOpenFile} />
+          <ActionButton icon={ExternalLink} title="打开文件" onClick={handleOpenFile} />
           {mode === 'unstaged' && onStage && (
             <ActionButton
               icon={Check}
-              title="Stage"
+              title="暂存"
               onClick={(e) => { e.stopPropagation(); onStage(diff.file) }}
               color="var(--status-running)"
             />
@@ -236,7 +236,7 @@ function DiffFileItem({ diff, mode, onStage, onUnstage, onDiscard, isReviewed, o
           {mode === 'unstaged' && onDiscard && (
             <ActionButton
               icon={X}
-              title="Discard changes"
+              title="丢弃更改"
               onClick={(e) => { e.stopPropagation(); onDiscard(diff.file) }}
               color="var(--status-error)"
             />
@@ -244,7 +244,7 @@ function DiffFileItem({ diff, mode, onStage, onUnstage, onDiscard, isReviewed, o
           {mode === 'staged' && onUnstage && (
             <ActionButton
               icon={Minus}
-              title="Unstage"
+              title="取消暂存"
               onClick={(e) => { e.stopPropagation(); onUnstage(diff.file) }}
               color="var(--status-waiting)"
             />
@@ -609,7 +609,7 @@ export function GitDiffPanel({ send, paneId }: GitDiffPanelProps) {
           <>
             <button
               onClick={handleMerge}
-              title="Merge into base branch"
+              title="合并到基础分支"
               className="pane-action-btn"
               style={{
                 display: 'flex',
@@ -627,7 +627,7 @@ export function GitDiffPanel({ send, paneId }: GitDiffPanelProps) {
             </button>
             <button
               onClick={handleDiscard}
-              title={confirmDiscard ? 'Click again to confirm discard' : 'Discard all changes and delete branch'}
+              title={confirmDiscard ? '再次点击确认丢弃' : '丢弃所有更改并删除分支'}
               className="pane-action-btn"
               style={{
                 display: 'flex',
@@ -643,7 +643,7 @@ export function GitDiffPanel({ send, paneId }: GitDiffPanelProps) {
               onMouseLeave={(e) => { if (!confirmDiscard) e.currentTarget.style.background = 'none' }}
             >
               <Trash2 size={13} />
-              {confirmDiscard ? 'Confirm' : 'Discard'}
+              {confirmDiscard ? '确认' : '丢弃'}
             </button>
           </>
         )}
@@ -663,7 +663,7 @@ export function GitDiffPanel({ send, paneId }: GitDiffPanelProps) {
 
         <button
           onClick={handleRefresh}
-          title="Refresh"
+          title="刷新"
           className="pane-action-btn"
           onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--bg-overlay)' }}
           onMouseLeave={(e) => { e.currentTarget.style.background = 'none' }}
@@ -707,7 +707,7 @@ export function GitDiffPanel({ send, paneId }: GitDiffPanelProps) {
             {!isWorktree && (
               <>
                 <SectionHeader
-                  label="Staged Changes"
+                  label="已暂存更改"
                   count={stagedDiffs.length}
                   collapsed={stagedCollapsed}
                   onToggle={() => setStagedCollapsed(!stagedCollapsed)}
@@ -716,7 +716,7 @@ export function GitDiffPanel({ send, paneId }: GitDiffPanelProps) {
                   {stagedDiffs.length > 0 && (
                     <ActionButton
                       icon={Minus}
-                      title="Unstage all"
+                      title="全部取消暂存"
                       onClick={() => handleUnstageAll()}
                       color="var(--status-waiting)"
                     />
@@ -748,7 +748,7 @@ export function GitDiffPanel({ send, paneId }: GitDiffPanelProps) {
                         <textarea
                           value={commitMessage}
                           onChange={(e) => setCommitMessage(e.target.value)}
-                          placeholder="Commit message..."
+                          placeholder="提交信息..."
                           rows={3}
                           onKeyDown={(e) => {
                             if ((e.metaKey || e.ctrlKey) && e.key === 'Enter') {
@@ -799,7 +799,7 @@ export function GitDiffPanel({ send, paneId }: GitDiffPanelProps) {
 
             {/* ─── Unstaged Changes Section ───────────────── */}
             <SectionHeader
-              label="Changes"
+              label="更改"
               count={unstagedDiffs.length}
               collapsed={unstagedCollapsed}
               onToggle={() => setUnstagedCollapsed(!unstagedCollapsed)}
@@ -809,13 +809,13 @@ export function GitDiffPanel({ send, paneId }: GitDiffPanelProps) {
                 <>
                   <ActionButton
                     icon={CheckCheck}
-                    title="Stage all"
+                    title="全部暂存"
                     onClick={() => handleStageAll()}
                     color="var(--status-running)"
                   />
                   <ActionButton
                     icon={Trash2}
-                    title={confirmDiscardAll ? 'Click again to confirm' : 'Discard all'}
+                    title={confirmDiscardAll ? '再次点击确认' : '全部丢弃'}
                     onClick={() => handleDiscardAll()}
                     color="var(--status-error)"
                   />

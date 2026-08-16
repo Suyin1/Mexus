@@ -21,13 +21,13 @@ function anthropicBaseUrl(baseUrl: string): string {
 
 export async function testModelProviderConnection(provider: ModelProviderConfig, model?: ModelDefinition): Promise<ModelConnectionResult> {
   if (!provider.type) {
-    return { ok: false, message: 'Select a provider format before testing.' }
+    return { ok: false, message: '请先选择 provider 格式再测试。' }
   }
   if (!provider.base_url.trim()) {
-    return { ok: false, message: 'Base URL is required.' }
+    return { ok: false, message: 'Base URL 不能为空。' }
   }
   if (!model?.id?.trim()) {
-    return { ok: false, message: 'Select a model before testing.' }
+    return { ok: false, message: '请先选择模型再测试。' }
   }
 
   const apiKey = resolveApiKey(provider)
@@ -64,11 +64,11 @@ export async function testModelProviderConnection(provider: ModelProviderConfig,
       signal: controller.signal,
     })
     if (response.ok) {
-      return { ok: true, status: response.status, message: `Connection succeeded for ${model.id}.` }
+      return { ok: true, status: response.status, message: `${model.id} 连接成功。` }
     }
     const detail = await response.text().catch(() => '')
     const suffix = detail.trim() ? `: ${detail.trim().slice(0, 160)}` : ''
-    return { ok: false, status: response.status, message: `Connection failed (${response.status})${suffix}` }
+    return { ok: false, status: response.status, message: `连接失败（${response.status}）${suffix}` }
   } catch (err) {
     const message = err instanceof Error && err.name === 'AbortError'
       ? 'Connection timed out.'

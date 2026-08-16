@@ -21,10 +21,10 @@ describe('workspaceStore editor tabs', () => {
     useWorkspaceStore.getState().resetWorkspace()
 
     expect(useWorkspaceStore.getState().tabs.map((tab) => [tab.id, tab.type, tab.label, tab.pinned])).toEqual([
-      ['tab:activity', 'activity', 'Activity', true],
-      ['tab:team', 'team', 'Team', true],
-      ['review:workspace', 'review', 'Review', true],
-      ['tab:replay', 'replay', 'Replay', true],
+      ['tab:activity', 'activity', '活动', true],
+      ['tab:team', 'team', '团队', true],
+      ['review:workspace', 'review', '审查', true],
+      ['tab:replay', 'replay', '回放', true],
     ])
   })
 
@@ -45,7 +45,7 @@ describe('workspaceStore editor tabs', () => {
     expect(state.activeTabId).toBe('tab:replay')
     expect(state.tabs.find((tab) => tab.id === 'tab:replay')).toMatchObject({
       type: 'replay',
-      label: 'Replay',
+      label: '回放',
       pinned: true,
     })
   })

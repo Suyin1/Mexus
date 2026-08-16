@@ -52,7 +52,7 @@ export function MissionKanban({ kanban, onOpenSource }: MissionKanbanProps) {
   if (!kanban) {
     return (
       <section className="mission-panel mission-kanban">
-        <div className="mission-empty">No Kanban data loaded.</div>
+        <div className="mission-empty">暂无 Kanban 数据。</div>
       </section>
     )
   }
@@ -63,15 +63,15 @@ export function MissionKanban({ kanban, onOpenSource }: MissionKanbanProps) {
         <div className="mission-panel-header">
           <div>
             <h3>Kanban</h3>
-            <p>Parser fallback</p>
+            <p>解析器降级</p>
           </div>
           {onOpenSource && (
-            <button className="pane-action-btn" title="Open kanban.md" onClick={() => onOpenSource('kanban.md')}>
+            <button className="pane-action-btn" title="打开 kanban.md" onClick={() => onOpenSource('kanban.md')}>
               <ExternalLink className="icon-xs" />
             </button>
           )}
         </div>
-        <div className="mission-warning">{kanban.error || 'Unable to parse kanban.md.'}</div>
+        <div className="mission-warning">{kanban.error || '无法解析 kanban.md。'}</div>
         <pre className="mission-raw-fallback">{kanban.raw}</pre>
       </section>
     )
@@ -85,30 +85,30 @@ export function MissionKanban({ kanban, onOpenSource }: MissionKanbanProps) {
           <p>{kanban.counts.toClaim} to claim / {kanban.counts.inProgress} in progress / {kanban.counts.done} done</p>
         </div>
         {onOpenSource && (
-          <button className="pane-action-btn" title="Open kanban.md" onClick={() => onOpenSource('kanban.md')}>
+          <button className="pane-action-btn" title="打开 kanban.md" onClick={() => onOpenSource('kanban.md')}>
             <ExternalLink className="icon-xs" />
           </button>
         )}
       </div>
 
-      <div className="mission-kanban-filters" aria-label="Kanban filters">
+      <div className="mission-kanban-filters" aria-label="Kanban 筛选">
         <label>
-          <span>Status</span>
+          <span>状态</span>
           <select value={statusFilter} onChange={(event) => setStatusFilter(event.target.value as MissionTaskStatus | 'all')}>
-            <option value="all">All</option>
+            <option value="all">全部</option>
             {STATUS_COLUMNS.map((status) => <option key={status} value={status}>{status}</option>)}
           </select>
         </label>
         <label>
           <span>Agent</span>
           <select value={agentFilter} onChange={(event) => setAgentFilter(event.target.value)}>
-            <option value="all">All</option>
+            <option value="all">全部</option>
             {agents.map((agent) => <option key={agent} value={agent}>{agent}</option>)}
           </select>
         </label>
         <label className="mission-search">
           <Search className="icon-xs" />
-          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="Filter tasks" />
+          <input value={query} onChange={(event) => setQuery(event.target.value)} placeholder="筛选任务" />
         </label>
       </div>
 
@@ -123,11 +123,11 @@ export function MissionKanban({ kanban, onOpenSource }: MissionKanbanProps) {
               </div>
               <div className="mission-kanban-column-body">
                 {tasks.length === 0 ? (
-                  <div className="mission-empty">No matching tasks.</div>
+                  <div className="mission-empty">没有匹配的任务。</div>
                 ) : tasks.map((task) => (
                   <article className="mission-task-card" key={`${task.status}-${task.ref}-${task.line}`}>
                     <div className="mission-task-card-top">
-                      <strong>{task.ref || 'No ref'}</strong>
+                      <strong>{task.ref || '无引用'}</strong>
                       {onOpenSource && (
                         <button className="pane-action-btn" title={`Open kanban.md line ${task.line}`} onClick={() => onOpenSource('kanban.md', task.line)}>
                           <ExternalLink className="icon-xs" />
@@ -140,11 +140,11 @@ export function MissionKanban({ kanban, onOpenSource }: MissionKanbanProps) {
                     <div className="mission-task-scope">{task.scope}</div>
                     <p>{task.request}</p>
                     <div className="mission-task-footer">
-                      <span>{task.updated || 'No update'}</span>
+                      <span>{task.updated || '无更新'}</span>
                       <span
                         className={`mission-review-badge ${task.review.trim() ? 'mission-review-badge--reviewed' : 'mission-review-badge--pending'}`}
-                        title={task.review.trim() ? 'Reviewed' : 'Review pending'}
-                        aria-label={task.review.trim() ? 'Reviewed' : 'Review pending'}
+                        title={task.review.trim() ? '已审查' : '待审查'}
+                        aria-label={task.review.trim() ? '已审查' : '待审查'}
                       />
                     </div>
                   </article>

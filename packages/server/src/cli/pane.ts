@@ -24,15 +24,15 @@ export async function runPaneCommand(args: string[], serverUrl: string, client: 
       await closePane(rest, serverUrl, client, io)
       return
     default:
-      throw new CliError('Usage: mexus pane <create|list|close>')
+      throw new CliError('用法: mexus pane <create|list|close>')
   }
 }
 
 async function createPane(rawArgs: string[], serverUrl: string, client: CliHttpClient, io: CliIo): Promise<void> {
   const args = [...rawArgs]
-  const name = requireArg(takeOption(args, '--name'), 'Missing --name')
-  const agent = requireArg(takeOption(args, '--agent'), 'Missing --agent')
-  if (!AGENTS.has(agent)) throw new CliError(`Unknown agent: ${agent}`)
+  const name = requireArg(takeOption(args, '--name'), '缺少 --name')
+  const agent = requireArg(takeOption(args, '--agent'), '缺少 --agent')
+  if (!AGENTS.has(agent)) throw new CliError(`未知 Agent: ${agent}`)
   const workdir = takeOption(args, '--workdir')
   const task = takeOption(args, '--task')
   const missionName = takeOption(args, '--mission')
@@ -43,9 +43,9 @@ async function createPane(rawArgs: string[], serverUrl: string, client: CliHttpC
   const yolo = takeFlag(args, '--yolo')
   takeOption(args, '--runtime')
   const json = takeFlag(args, '--json')
-  if (args.length > 0) throw new CliError(`Unknown pane create argument: ${args[0]}`)
+  if (args.length > 0) throw new CliError(`未知的 pane create 参数: ${args[0]}`)
   if (missionRole !== 'squad-lead' && missionRole !== 'mission-agent') {
-    throw new CliError(`Invalid mission role: ${missionRole}`)
+    throw new CliError(`无效的 mission 角色: ${missionRole}`)
   }
 
   const payload = {
@@ -73,7 +73,7 @@ async function createPane(rawArgs: string[], serverUrl: string, client: CliHttpC
   if (json) {
     printJson(io, response)
   } else {
-    io.stdout(`Created pane ${response.pane.id}: ${response.pane.name}`)
+    io.stdout(`已创建执行面板 ${response.pane.id}: ${response.pane.name}`)
   }
 }
 
@@ -81,7 +81,7 @@ async function listPanes(rawArgs: string[], serverUrl: string, client: CliHttpCl
   const args = [...rawArgs]
   const mission = takeOption(args, '--mission')
   const json = takeFlag(args, '--json')
-  if (args.length > 0) throw new CliError(`Unknown pane list argument: ${args[0]}`)
+  if (args.length > 0) throw new CliError(`未知的 pane list 参数: ${args[0]}`)
 
   const query = mission ? `?mission=${encodeURIComponent(mission)}` : ''
   const response = await requestJson<PaneListResponse>(client, `${serverUrl}/api/panes${query}`)
@@ -95,8 +95,8 @@ async function listPanes(rawArgs: string[], serverUrl: string, client: CliHttpCl
 }
 
 async function closePane(args: string[], serverUrl: string, client: CliHttpClient, io: CliIo): Promise<void> {
-  const id = requireArg(args[0], 'Missing pane id')
-  if (args.length > 1) throw new CliError(`Unknown pane close argument: ${args[1]}`)
+  const id = requireArg(args[0], '缺少 pane id')
+  if (args.length > 1) throw new CliError(`未知的 pane close 参数: ${args[1]}`)
   await requestJson<{ ok: true }>(client, `${serverUrl}/api/panes/${encodeURIComponent(id)}`, { method: 'DELETE' })
-  io.stdout(`Closed pane ${id}`)
+  io.stdout(`已关闭执行面板 ${id}`)
 }

@@ -47,11 +47,11 @@ function targetFor(instance: HubInstanceRecord): ConnectionTarget {
 function formatUptime(ts: number): string {
   const diff = Date.now() - ts
   const mins = Math.floor(diff / 60_000)
-  if (mins < 1) return 'just now'
-  if (mins < 60) return `${mins}m ago`
+  if (mins < 1) return '刚刚'
+  if (mins < 60) return `${mins} 分钟前`
   const hrs = Math.floor(mins / 60)
-  if (hrs < 24) return `${hrs}h ago`
-  return `${Math.floor(hrs / 24)}d ago`
+  if (hrs < 24) return `${hrs} 小时前`
+  return `${Math.floor(hrs / 24)} 天前`
 }
 
 export function HubApp() {
@@ -70,7 +70,7 @@ export function HubApp() {
     try {
       const res = await fetch(hubApi(`/api/instances${scan ? '?scan=1' : ''}`))
       const data = await res.json() as { instances: HubInstanceRecord[]; error?: string }
-      if (!res.ok) throw new Error(data.error || 'Failed to load instances')
+      if (!res.ok) throw new Error(data.error || '加载实例失败')
       setInstances(data.instances)
       setTabs((current) => current.map((tab) => {
         const instance = data.instances.find((item) => serverIdFor(item.port) === tab.serverId)
@@ -195,7 +195,7 @@ export function HubApp() {
 
   const createInstance = useCallback(async () => {
     if (!cwdInput.trim()) {
-      setError('Project path is required')
+      setError('项目路径不能为空')
       return
     }
     setIsCreating(true)
@@ -208,7 +208,7 @@ export function HubApp() {
         body: JSON.stringify(body),
       })
       const data = await res.json() as { error?: string; port?: number }
-      if (!res.ok) throw new Error(data.error || 'Failed to start instance')
+      if (!res.ok) throw new Error(data.error || '启动实例失败')
       setCwdInput('')
       setPortInput('')
       const nextInstances = await refresh(true)
@@ -226,7 +226,7 @@ export function HubApp() {
     const res = await fetch(hubApi(`/api/instances/${instance.port}/start`), { method: 'POST' })
     const data = await res.json() as { error?: string }
     if (!res.ok) {
-      setError(data.error || 'Failed to start instance')
+      setError(data.error || '启动实例失败')
       return
     }
     await refresh(true)
@@ -237,7 +237,7 @@ export function HubApp() {
     const res = await fetch(hubApi(`/api/instances/${instance.port}/stop`), { method: 'POST' })
     const data = await res.json() as { error?: string }
     if (!res.ok) {
-      setError(data.error || 'Failed to stop instance')
+      setError(data.error || '停止实例失败')
       return
     }
     const stoppedServerId = serverIdFor(instance.port)
@@ -253,7 +253,7 @@ export function HubApp() {
     const res = await fetch(hubApi(`/api/instances/${instance.port}`), { method: 'DELETE' })
     const data = await res.json() as { error?: string }
     if (!res.ok) {
-      setError(data.error || 'Failed to remove instance')
+      setError(data.error || '删除实例失败')
       return
     }
     const removedServerId = serverIdFor(instance.port)
@@ -273,7 +273,7 @@ export function HubApp() {
     <div style={{ height: '100%', display: 'flex', flexDirection: 'column', background: 'var(--bg-base)' }}>
       <div style={{ height: 40, display: 'flex', alignItems: 'stretch', borderBottom: '1px solid var(--border-subtle)', background: 'var(--bg-header)', overflow: 'hidden' }}>
         <div style={brandAreaStyle}>
-          <BrandLockup subtitle="Multi-agent execution" />
+          <BrandLockup subtitle="多 Agent 执行" />
         </div>
         <div style={tabRailStyle}>
         {tabsRestored && (
@@ -289,9 +289,9 @@ export function HubApp() {
           const snapshot = instance ? buildHubTabSnapshot(instance) : tab.snapshot
           const tabTitle = [
             snapshot.projectName,
-            `port: ${snapshot.port}`,
-            `status: ${snapshot.status}`,
-            `pid: ${snapshot.pid || 'n/a'}`,
+            `端口: ${snapshot.port}`,
+            `状态: ${snapshot.status}`,
+            `PID: ${snapshot.pid || 'n/a'}`,
             snapshot.cwd,
           ].join('\n')
           return (
@@ -318,8 +318,8 @@ export function HubApp() {
             type="button"
             className={`app-header-icon-btn ${activeTabId === SETTINGS_TAB ? 'app-header-icon-btn--active' : ''}`}
             onClick={openSettingsTab}
-            title="Mexus Settings"
-            aria-label="Mexus Settings"
+            title="Mexus 设置"
+            aria-label="Mexus 设置"
           >
             <Settings size={15} />
           </button>
@@ -339,15 +339,15 @@ export function HubApp() {
             <div className="hub-dashboard">
               <div className="hub-dashboard__main">
                 <SectionHeader
-                  title={`${instances.length} tracked instances`}
-                  description="Local execution servers"
+                  title={`${instances.length} 个已跟踪实例`}
+                  description="本地执行服务器"
                 />
                 {error && <ErrorBanner className="hub-dashboard__error" message={error} />}
                 <div className="hub-instance-list">
                   {instances.length === 0 && (
                     <EmptyState
-                      title="No execution servers tracked"
-                      description="Start one from the panel on the right."
+                      title="暂无已跟踪的执行服务器"
+                      description="从右侧面板启动一个。"
                     />
                   )}
                   {instances.map((instance) => (
@@ -359,8 +359,8 @@ export function HubApp() {
                       status={instance.status === 'running' ? 'running' : 'stopped'}
                       meta={(
                         <MetaRow>
-                          <KeyValueMeta label="pid" value={instance.pid || '—'} />
-                          <KeyValueMeta label="started" value={formatUptime(instance.startedAt)} />
+                          <KeyValueMeta label="PID" value={instance.pid || '—'} />
+                          <KeyValueMeta label="启动时间" value={formatUptime(instance.startedAt)} />
                         </MetaRow>
                       )}
                       actions={(
@@ -392,21 +392,21 @@ export function HubApp() {
               </div>
 
               <aside className="hub-dashboard__side">
-                <SectionHeader title="Start execution server" description="New execution server" />
+                <SectionHeader title="启动执行服务器" description="新建执行服务器" />
                 <div className="hub-create-form">
-                  <Field label="Project path">
+                  <Field label="项目路径">
                     <Input value={cwdInput} onChange={(event) => setCwdInput(event.target.value)} placeholder="~/projects/my-app" />
                   </Field>
-                  <Field label="Port">
-                    <Input value={portInput} onChange={(event) => setPortInput(event.target.value)} placeholder="Auto assign" />
+                  <Field label="端口">
+                    <Input value={portInput} onChange={(event) => setPortInput(event.target.value)} placeholder="自动分配" />
                   </Field>
                 </div>
                 <Button className="hub-create-form__submit" variant="primary" onClick={createInstance} disabled={isCreating}>
                   <FolderPlus size={14} />
-                  {isCreating ? 'Starting…' : 'Create server'}
+                  {isCreating ? '启动中…' : '创建服务器'}
                 </Button>
                 <InlineNotice>
-                  Mexus Hub owns the tabs and connection state. The Hub view keeps the current server connection alive; opening another running server switches the active connection.
+                  Mexus Hub 管理标签页和连接状态。Hub 视图保持当前服务器连接活跃；打开另一个运行中的服务器会切换当前连接。
                 </InlineNotice>
               </aside>
             </div>
@@ -417,7 +417,7 @@ export function HubApp() {
           ) : activeTabId === connectedTabId && connectedTarget ? null : (
             <div style={{ position: 'absolute', inset: 0, display: 'grid', placeItems: 'center', color: 'var(--text-secondary)', padding: 24 }}>
               <div style={{ maxWidth: 480, textAlign: 'center' }}>
-                <div style={{ fontSize: 28, fontWeight: 600, marginBottom: 10 }}>{activeTab?.snapshot.projectName || 'Disconnected server'}</div>
+                <div style={{ fontSize: 28, fontWeight: 600, marginBottom: 10 }}>{activeTab?.snapshot.projectName || '未连接的服务器'}</div>
                 <div style={{ marginBottom: 16 }}>
                   This tab is not connected. Start the local server again to reconnect, or close/remove the tab if you no longer need it.
                 </div>

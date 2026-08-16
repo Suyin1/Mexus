@@ -274,7 +274,7 @@ describe('MissionService lifecycle', () => {
     const mission = service.getMission('raw-fallback')
 
     expect(mission.files.kanban.raw).toBe('not a kanban')
-    expect(mission.files.kanban.parseError).toMatch(/Kanban sections/)
+    expect(mission.files.kanban.parseError).toMatch(/未找到全部 Kanban 分区/)
     expect(mission.kanban).toEqual({ toClaim: [], inProgress: [], done: [] })
   })
 
@@ -283,8 +283,8 @@ describe('MissionService lifecycle', () => {
     tempProjects.push(projectDir)
     const service = new MissionService(projectDir, new ConfigManager(projectDir))
 
-    await expect(service.createMission({ name: '../escape', activate: true })).rejects.toThrow(/Invalid Mission name/)
-    expect(() => service.getMission('nested/path')).toThrow(/Invalid Mission name/)
+    await expect(service.createMission({ name: '../escape', activate: true })).rejects.toThrow(/无效的 Mission 名称/)
+    expect(() => service.getMission('nested/path')).toThrow(/无效的 Mission 名称/)
   })
 
   it('archives a Mission by moving its directory under _archived', async () => {

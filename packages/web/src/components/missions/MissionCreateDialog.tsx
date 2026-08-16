@@ -15,9 +15,9 @@ export interface MissionCreateValidationErrors {
 
 export function validateMissionCreateInput(input: Pick<MissionCreateFormInput, 'name'>): MissionCreateValidationErrors {
   const name = input.name.trim()
-  if (!name) return { name: 'Mission name is required.' }
+  if (!name) return { name: 'Mission 名称不能为空。' }
   if (!/^[A-Za-z0-9][A-Za-z0-9._-]*$/.test(name)) {
-    return { name: 'Use letters, numbers, dots, underscores, or hyphens. Start with a letter or number.' }
+    return { name: '仅允许字母、数字、点、下划线或连字符，且以字母或数字开头。' }
   }
   return {}
 }
@@ -81,22 +81,22 @@ export function MissionCreateDialog({ isOpen, onClose }: MissionCreateDialogProp
       onClose()
       return
     }
-    setSubmitError(useMissionStore.getState().error || storeError || 'Unable to create Mission.')
+    setSubmitError(useMissionStore.getState().error || storeError || '无法创建 Mission。')
   }
 
   return (
     <div className="dialog-overlay" onClick={(event) => { if (event.target === event.currentTarget && !isLoading) onClose() }}>
       <div className="add-pane-dialog mission-create-dialog">
         <div className="apd-header">
-          <h2 className="apd-title">New Mission</h2>
-          <button type="button" onClick={onClose} className="apd-close-btn" disabled={isLoading} aria-label="Close">
+          <h2 className="apd-title">新建 Mission</h2>
+          <button type="button" onClick={onClose} className="apd-close-btn" disabled={isLoading} aria-label="关闭">
             <X size={16} />
           </button>
         </div>
 
         <form className="apd-form" onSubmit={handleSubmit}>
           <div className="apd-section">
-            <label className="apd-label" htmlFor="mission-create-name">Mission name</label>
+            <label className="apd-label" htmlFor="mission-create-name">Mission 名称</label>
             <input
               id="mission-create-name"
               className="apd-input"
@@ -114,37 +114,37 @@ export function MissionCreateDialog({ isOpen, onClose }: MissionCreateDialogProp
           </div>
 
           <div className="apd-section">
-            <label className="apd-label" htmlFor="mission-create-goal">Goal</label>
+            <label className="apd-label" htmlFor="mission-create-goal">目标</label>
             <textarea
               id="mission-create-goal"
               className="apd-input mission-create-textarea"
               value={form.goal}
               onChange={(event) => setField('goal', event.target.value)}
-              placeholder="What should this Mission accomplish?"
+              placeholder="这个 Mission 要实现什么？"
               rows={4}
             />
           </div>
 
           <div className="apd-section">
-            <label className="apd-label" htmlFor="mission-create-constraints">Constraints</label>
+            <label className="apd-label" htmlFor="mission-create-constraints">约束</label>
             <textarea
               id="mission-create-constraints"
               className="apd-input mission-create-textarea"
               value={form.constraints}
               onChange={(event) => setField('constraints', event.target.value)}
-              placeholder="Boundaries, non-goals, sequencing, or safety constraints"
+              placeholder="边界、非目标、顺序或安全约束"
               rows={3}
             />
           </div>
 
           <div className="apd-section">
-            <label className="apd-label" htmlFor="mission-create-acceptance">Acceptance</label>
+            <label className="apd-label" htmlFor="mission-create-acceptance">验收标准</label>
             <textarea
               id="mission-create-acceptance"
               className="apd-input mission-create-textarea"
               value={form.acceptance}
               onChange={(event) => setField('acceptance', event.target.value)}
-              placeholder="Observable completion criteria"
+              placeholder="可观察的完成标准"
               rows={3}
             />
           </div>
@@ -156,7 +156,7 @@ export function MissionCreateDialog({ isOpen, onClose }: MissionCreateDialogProp
               Cancel
             </button>
             <button type="submit" className="apd-btn apd-btn-primary" disabled={!canSubmit}>
-              {isLoading ? 'Creating...' : 'Create Mission'}
+              {isLoading ? '创建中...' : '创建 Mission'}
             </button>
           </div>
         </form>

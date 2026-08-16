@@ -180,12 +180,12 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
   const missionFilterOptions = paneFilterOptions.missions
   const agentFilterOptions = paneFilterOptions.agents
   const missionFilterMenuOptions = useMemo<PaneFilterMenuOption[]>(() => [
-    { value: 'all', label: 'All missions' },
-    { value: '__none__', label: 'No mission' },
+    { value: 'all', label: '全部 Mission' },
+    { value: '__none__', label: '无 Mission' },
     ...missionFilterOptions.map((missionName) => ({ value: missionName, label: missionName })),
   ], [missionFilterOptions])
   const agentFilterMenuOptions = useMemo<PaneFilterMenuOption[]>(() => [
-    { value: 'all', label: 'All agents' },
+    { value: 'all', label: '全部 Agent' },
     ...agentFilterOptions.map((agentType) => ({ value: agentType, label: agentType })),
   ], [agentFilterOptions])
   const filteredPanes = useMemo(() => filterHubPanes(panes, missionFilter, agentFilter), [agentFilter, missionFilter, panes])
@@ -199,7 +199,7 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
   const shouldMountTerminalStage = panes.some((pane) => pane.agent !== '__shell__')
   const paneFilterActive = missionFilter !== 'all' || agentFilter !== 'all'
   const paneFilterSummary = [
-    missionFilter === 'all' ? null : missionFilter === '__none__' ? 'No mission' : missionFilter,
+    missionFilter === 'all' ? null : missionFilter === '__none__' ? '无 Mission' : missionFilter,
     agentFilter === 'all' ? null : agentFilter,
   ].filter(Boolean).join(' / ')
   const clearPaneFilters = useCallback(() => {
@@ -272,7 +272,7 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
             position: 'relative',
           }}
         >
-          <BrandLockup subtitle="Multi-agent execution" />
+          <BrandLockup subtitle="多 Agent 执行" />
           {name && (
             <span
               style={{
@@ -298,8 +298,8 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
             type="button"
             className="app-header-icon-btn"
             onClick={handleOpenSettings}
-            title="Settings"
-            aria-label="Settings"
+            title="设置"
+            aria-label="设置"
             style={{ marginLeft: 'auto' }}
           >
             <Settings size={15} />
@@ -339,21 +339,21 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
               <div className="pane-panel-header">
                 <div className="pane-panel-header__title">
                   <PanelsTopLeft className="icon-sm" />
-                  <span>Panes</span>
+                  <span>执行面板</span>
                 </div>
                 <div className="pane-panel-header__actions">
                   {panes.length > 0 && (
                     <button
                       type="button"
                       className={`pane-filter-toggle ${paneFiltersOpen ? 'pane-filter-toggle--open' : ''} ${paneFilterActive ? 'pane-filter-toggle--active' : ''}`}
-                      title="Filter panes"
+                      title="筛选执行面板"
                       onClick={() => setPaneFiltersOpen((open) => !open)}
                     >
                       <SlidersHorizontal size={13} />
                       <span>{paneFilterActive ? paneFilterSummary : 'Filter'}</span>
                     </button>
                   )}
-                  <Button variant="secondary" size="sm" onClick={handleOpenAddPane} title="Add pane">
+                  <Button variant="secondary" size="sm" onClick={handleOpenAddPane} title="添加执行面板">
                     <Plus size={14} />
                     Add
                   </Button>
@@ -363,7 +363,7 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
                 <div className="pane-filter-bar" ref={paneFilterBarRef}>
                   <PaneFilterMenu
                     label="Mission"
-                    title="Filter by mission"
+                    title="按 Mission 筛选"
                     value={missionFilter}
                     options={missionFilterMenuOptions}
                     isOpen={openPaneFilterMenu === 'mission'}
@@ -375,7 +375,7 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
                   />
                   <PaneFilterMenu
                     label="Agent"
-                    title="Filter by agent type"
+                    title="按 Agent 类型筛选"
                     value={agentFilter}
                     options={agentFilterMenuOptions}
                     isOpen={openPaneFilterMenu === 'agent'}
@@ -386,7 +386,7 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
                     }}
                   />
                   {paneFilterActive && (
-                    <button type="button" className="pane-filter-clear" onClick={clearPaneFilters} title="Clear pane filters">
+                    <button type="button" className="pane-filter-clear" onClick={clearPaneFilters} title="清除面板筛选">
                       <X size={13} />
                     </button>
                   )}
@@ -423,7 +423,7 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
                       }}
                     >
                       <Monitor className="icon-hero" />
-                      <span style={{ fontSize: 'var(--font-lg)' }}>No execution panes yet</span>
+                      <span style={{ fontSize: 'var(--font-lg)' }}>暂无执行面板</span>
                       <Button variant="primary" onClick={handleOpenAddPane}>
                           Create execution pane
                       </Button>
@@ -500,7 +500,7 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
               <button
                 type="button"
                 className="files-panel-toggle"
-                title={filesCollapsed ? 'Show files' : 'Hide files'}
+                title={filesCollapsed ? '显示文件' : '隐藏文件'}
                 onClick={() => setFilesCollapsed((collapsed) => !collapsed)}
               >
                 {filesCollapsed ? <ChevronLeft size={11} /> : <ChevronRight size={11} />}
@@ -529,7 +529,7 @@ export function Layout({ send, hideHeader = false, hubMode = false }: LayoutProp
                       <button
                         type="button"
                         className="pane-action-btn"
-                        title="Collapse all"
+                        title="全部折叠"
                         onClick={() => fileTreeActions?.collapseAll()}
                         disabled={!fileTreeActions}
                       >

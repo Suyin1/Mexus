@@ -53,7 +53,7 @@ export function registerPaneRoutes(
     const exists = workspaceManager.getPanes().some((pane) => pane.id === id)
     if (!exists) {
       reply.code(404)
-      return { error: `Pane not found: ${id}` }
+      return { error: `未找到执行面板: ${id}` }
     }
 
     await workspaceManager.closePane(id)
@@ -65,32 +65,32 @@ function parsePaneCreateBody(
   body: PaneCreateBody,
   configManager: ConfigManager,
 ): { ok: true; config: PaneCreateConfig } | { ok: false; error: string } {
-  if (!isRecord(body)) return { ok: false, error: 'Request body must be an object' }
+  if (!isRecord(body)) return { ok: false, error: '请求体必须是对象' }
 
   const name = stringField(body.name)?.trim()
-  if (!name) return { ok: false, error: 'Pane name is required' }
+  if (!name) return { ok: false, error: '执行面板名称不能为空' }
 
   const agent = stringField(body.agent)
   if (!agent || agent === '__shell__' || !configManager.getAgentDefinition(agent)) {
-    return { ok: false, error: `Unknown agent: ${agent || ''}`.trim() }
+    return { ok: false, error: `未知 Agent: ${agent || ''}`.trim() }
   }
 
   const restore = body.restore === undefined ? 'manual' : stringField(body.restore)
   if (!restore || !RESTORE_MODES.has(restore as RestoreMode)) {
-    return { ok: false, error: `Invalid restore mode: ${String(body.restore)}` }
+    return { ok: false, error: `无效的恢复模式: ${String(body.restore)}` }
   }
 
   const isolation = body.isolation === undefined ? 'shared' : stringField(body.isolation)
   if (!isolation || !ISOLATION_MODES.has(isolation as IsolationMode)) {
-    return { ok: false, error: `Invalid isolation mode: ${String(body.isolation)}` }
+    return { ok: false, error: `无效的隔离模式: ${String(body.isolation)}` }
   }
 
   const mission = body.mission === undefined ? undefined : parseMission(body.mission)
   if (mission && !mission.ok) return { ok: false, error: mission.error }
 
-  if (body.workdir !== undefined && typeof body.workdir !== 'string') return { ok: false, error: 'workdir must be a string' }
-  if (body.task !== undefined && typeof body.task !== 'string') return { ok: false, error: 'task must be a string' }
-  if (body.yolo !== undefined && typeof body.yolo !== 'boolean') return { ok: false, error: 'yolo must be a boolean' }
+  if (body.workdir !== undefined && typeof body.workdir !== 'string') return { ok: false, error: 'workdir 必须是字符串' }
+  if (body.task !== undefined && typeof body.task !== 'string') return { ok: false, error: 'task 必须是字符串' }
+  if (body.yolo !== undefined && typeof body.yolo !== 'boolean') return { ok: false, error: 'yolo 必须是布尔值' }
 
   return {
     ok: true,
@@ -108,17 +108,17 @@ function parsePaneCreateBody(
 }
 
 function parseMission(value: unknown): { ok: true; mission: PaneMission } | { ok: false; error: string } {
-  if (!isRecord(value)) return { ok: false, error: 'mission must be an object' }
+  if (!isRecord(value)) return { ok: false, error: 'mission 必须是对象' }
 
   const name = stringField(value.name)?.trim()
   const missionPath = stringField(value.path)?.trim()
   const role = stringField(value.role)
   const agentName = stringField(value.agentName)?.trim()
 
-  if (!name) return { ok: false, error: 'mission.name is required' }
-  if (!missionPath) return { ok: false, error: 'mission.path is required' }
+  if (!name) return { ok: false, error: 'mission.name 不能为空' }
+  if (!missionPath) return { ok: false, error: 'mission.path 不能为空' }
   if (role !== 'squad-lead' && role !== 'mission-agent') {
-    return { ok: false, error: 'mission.role must be squad-lead or mission-agent' }
+    return { ok: false, error: 'mission.role 必须是 squad-lead 或 mission-agent' }
   }
 
   return {

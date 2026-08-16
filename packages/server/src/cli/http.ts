@@ -34,13 +34,13 @@ export async function requestJson<T>(
       },
     })
   } catch {
-    throw new CliError('Mexus server not running - start it with `mexus start`')
+    throw new CliError('Mexus 服务未运行 - 请使用 `mexus start` 启动')
   }
 
   const text = await response.text()
   const data = text ? JSON.parse(text) as T & { error?: string } : {} as T & { error?: string }
   if (!response.ok) {
-    throw new CliError(data.error || `Request failed with HTTP ${response.status}`)
+    throw new CliError(data.error || `请求失败，HTTP 状态码 ${response.status}`)
   }
   return data
 }
@@ -50,7 +50,7 @@ export function takeOption(args: string[], name: string): string | undefined {
   if (index < 0) return undefined
   const value = args[index + 1]
   if (!value || value.startsWith('--')) {
-    throw new CliError(`Missing value for ${name}`)
+    throw new CliError(`缺少 ${name} 的值`)
   }
   args.splice(index, 2)
   return value

@@ -82,7 +82,7 @@ export function CommandPalette({ open, onClose, send, onAddPane }: CommandPalett
             ref={inputRef}
             value={search}
             onValueChange={setSearch}
-            placeholder="Type a command..."
+            placeholder="输入命令..."
             style={{
               flex: 1,
               background: 'none',
@@ -118,7 +118,7 @@ export function CommandPalette({ open, onClose, send, onAddPane }: CommandPalett
           </Command.Empty>
 
           {/* Pane Actions */}
-          <Command.Group heading={<GroupHeading>Panes</GroupHeading>}>
+          <Command.Group heading={<GroupHeading>执行面板</GroupHeading>}>
             <Item
               onSelect={() => runAndClose(onAddPane)}
               icon={<Plus size={14} />}
@@ -176,7 +176,7 @@ export function CommandPalette({ open, onClose, send, onAddPane }: CommandPalett
           </Command.Group>
 
           {/* Themes */}
-          <Command.Group heading={<GroupHeading>Theme</GroupHeading>}>
+          <Command.Group heading={<GroupHeading>主题</GroupHeading>}>
             {themes.map((theme) => (
               <Item
                 key={theme}

@@ -9,9 +9,9 @@ export interface MissionRouteOptions {
 
 function errorStatus(err: unknown): number {
   const message = err instanceof Error ? err.message : String(err)
-  if (/Invalid Mission name/.test(message)) return 400
+  if (/无效的 Mission 名称/.test(message)) return 400
   if (err instanceof MissionArchiveBlockedError) return 409
-  if (/not found/i.test(message)) return 404
+  if (/未找到/i.test(message)) return 404
   if (/already exists/i.test(message)) return 409
   if (/Missing Mission template/.test(message)) return 500
   return 400
@@ -54,7 +54,7 @@ export function registerMissionRoutes(fastify: FastifyInstance, missionService: 
     const mission = missionService.getActiveMission()
     if (!mission) {
       reply.code(404)
-      return { error: 'No active Mission found' }
+      return { error: '未找到激活的 Mission' }
     }
     return mission
   })

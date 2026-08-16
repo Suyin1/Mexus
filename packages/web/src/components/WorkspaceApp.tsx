@@ -182,7 +182,7 @@ export function WorkspaceApp({ target, hideHeader = false, hubMode = false }: Wo
 
         case 'git.result':
           if (!event.success) {
-            console.error(`git.${event.action} failed:`, event.message)
+            console.error(`git.${event.action} 失败:`, event.message)
           }
           break
 

@@ -84,17 +84,17 @@ function BrandCard({ snapshot }: { snapshot: HubConsoleSnapshot }) {
   return React.createElement(Card, { title: 'Mexus', width: 64, minHeight: 23 },
     React.createElement(Logo),
     React.createElement(Box, { marginTop: 1, flexDirection: 'column' },
-      React.createElement(Row, { label: 'version', value: snapshot.version, color: 'cyan' }),
-      React.createElement(Row, { label: 'hub', value: 'local workspace console' }),
-      React.createElement(Row, { label: 'url', value: `http://localhost:${snapshot.port}`, color: 'green' }),
+      React.createElement(Row, { label: '版本', value: snapshot.version, color: 'cyan' }),
+      React.createElement(Row, { label: 'hub', value: '本地工作区控制台' }),
+      React.createElement(Row, { label: '地址', value: `http://localhost:${snapshot.port}`, color: 'green' }),
     ),
     React.createElement(Box, { marginTop: 1, flexDirection: 'column' },
-      React.createElement(Row, { label: 'registry', value: truncate(snapshot.registryPath, 44) }),
-      React.createElement(Row, { label: 'logs', value: truncate(snapshot.logDir, 44) }),
+      React.createElement(Row, { label: '注册表', value: truncate(snapshot.registryPath, 44) }),
+      React.createElement(Row, { label: '日志', value: truncate(snapshot.logDir, 44) }),
     ),
     React.createElement(Box, { flexGrow: 1 }),
     React.createElement(Box, null,
-      React.createElement(Text, { color: 'gray' }, 'ctrl+c to stop'),
+      React.createElement(Text, { color: 'gray' }, 'ctrl+c 停止'),
     ),
   )
 }
@@ -102,26 +102,26 @@ function BrandCard({ snapshot }: { snapshot: HubConsoleSnapshot }) {
 function ProjectsCard({ snapshot }: { snapshot: HubConsoleSnapshot }) {
   const running = snapshot.instances.filter((instance) => instance.status === 'running').length
   const stopped = snapshot.instances.length - running
-  return React.createElement(Card, { title: 'Projects', width: 36 },
-    React.createElement(Row, { label: 'running', value: running, color: running > 0 ? 'green' : 'gray' }),
-    React.createElement(Row, { label: 'stopped', value: stopped }),
-    React.createElement(Row, { label: 'tracked', value: snapshot.instances.length }),
+  return React.createElement(Card, { title: '项目', width: 36 },
+    React.createElement(Row, { label: '运行中', value: running, color: running > 0 ? 'green' : 'gray' }),
+    React.createElement(Row, { label: '已停止', value: stopped }),
+    React.createElement(Row, { label: '已跟踪', value: snapshot.instances.length }),
   )
 }
 
 function StatusCard({ snapshot }: { snapshot: HubConsoleSnapshot }) {
-  return React.createElement(Card, { title: 'Status', width: 36 },
-    React.createElement(Row, { label: 'uptime', value: formatDuration(snapshot.uptimeSeconds) }),
-    React.createElement(Row, { label: 'pid', value: snapshot.pid }),
-    React.createElement(Row, { label: 'node', value: snapshot.nodeVersion }),
+  return React.createElement(Card, { title: '状态', width: 36 },
+    React.createElement(Row, { label: '运行时长', value: formatDuration(snapshot.uptimeSeconds) }),
+    React.createElement(Row, { label: 'PID', value: snapshot.pid }),
+    React.createElement(Row, { label: 'Node', value: snapshot.nodeVersion }),
   )
 }
 
 function ConnectionsCard({ snapshot }: { snapshot: HubConsoleSnapshot }) {
   const rows = snapshot.instances.slice(0, 8)
-  return React.createElement(Card, { title: 'Connections', width: 76 },
+  return React.createElement(Card, { title: '连接', width: 76 },
     rows.length === 0
-      ? React.createElement(Text, { color: 'gray' }, 'no tracked project connections yet')
+      ? React.createElement(Text, { color: 'gray' }, '暂无已跟踪的项目连接')
       : rows.map((instance) => React.createElement(Box, { key: `${instance.port}:${instance.pid}` },
           React.createElement(Box, { width: 3 }, React.createElement(Text, { color: instance.status === 'running' ? 'green' : 'gray' }, instance.status === 'running' ? '●' : '○')),
           React.createElement(Box, { width: 7 }, React.createElement(Text, null, String(instance.port))),
@@ -133,15 +133,15 @@ function ConnectionsCard({ snapshot }: { snapshot: HubConsoleSnapshot }) {
 }
 
 function ResourcesCard({ snapshot }: { snapshot: HubConsoleSnapshot }) {
-  return React.createElement(Card, { title: 'Resources', width: 76 },
-    React.createElement(Row, { label: 'memory', value: `rss ${formatBytes(snapshot.memory.rss)} / heap ${formatBytes(snapshot.memory.heapUsed)}` }),
-    React.createElement(Row, { label: 'load', value: snapshot.loadAverage.map((value) => value.toFixed(2)).join('  ') }),
+  return React.createElement(Card, { title: '资源', width: 76 },
+    React.createElement(Row, { label: '内存', value: `rss ${formatBytes(snapshot.memory.rss)} / heap ${formatBytes(snapshot.memory.heapUsed)}` }),
+    React.createElement(Row, { label: '负载', value: snapshot.loadAverage.map((value) => value.toFixed(2)).join('  ') }),
   )
 }
 
 function WarningsCard({ warnings }: { warnings: string[] }) {
   if (warnings.length === 0) return null
-  return React.createElement(Card, { title: 'Warnings', width: 76 },
+  return React.createElement(Card, { title: '警告', width: 76 },
     warnings.map((warning) => React.createElement(Text, { key: warning, color: 'yellow' }, warning)),
   )
 }

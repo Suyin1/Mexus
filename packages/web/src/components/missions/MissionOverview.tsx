@@ -68,7 +68,7 @@ export function MissionOverview({ mission, overview, kanban }: {
       {mission.incomplete && (
         <div style={{ display: 'flex', gap: 8, color: '#F0883E', fontSize: 'var(--font-xs)', lineHeight: 1.45 }}>
           <AlertTriangle className="icon-xs" style={{ flexShrink: 0, marginTop: 2 }} />
-          <span>Mission files are incomplete{mission.missingFiles?.length ? `: ${mission.missingFiles.join(', ')}` : ''}</span>
+          <span>Mission 文件不完整{mission.missingFiles?.length ? `: ${mission.missingFiles.join(', ')}` : ''}</span>
         </div>
       )}
 

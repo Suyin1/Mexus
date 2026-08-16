@@ -140,7 +140,7 @@ export function parseMissionKanban(markdown: string): MissionKanbanParseResult {
     return {
       ok: false,
       raw: markdown,
-      error: 'Kanban sections To Claim, In Progress, and Done were not all found.',
+      error: '未找到全部 Kanban 分区（To Claim、In Progress、Done）。',
       tasks: { ...EMPTY_KANBAN },
     }
   }
@@ -223,7 +223,7 @@ export function parseMissionRoundtable(markdown: string): MissionRoundtableParse
     return {
       ok: false,
       raw: markdown,
-      error: 'No roundtable review item blocks found.',
+      error: '未找到 roundtable 评审项区块。',
       items: [],
     }
   }

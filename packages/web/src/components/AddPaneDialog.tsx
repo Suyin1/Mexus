@@ -156,7 +156,7 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
       <div className="add-pane-dialog">
         {/* Header */}
         <div className="apd-header">
-          <h2 className="apd-title">New Agent Pane</h2>
+          <h2 className="apd-title">新建 Agent 执行面板</h2>
           <button type="button" onClick={onClose} className="apd-close-btn">
             <X size={16} />
           </button>
@@ -181,20 +181,20 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
                 )
               })}
               {visibleAgentTypes.length === 0 && (
-                <div className="apd-agent-empty">No configured agents available.</div>
+                <div className="apd-agent-empty">没有可用的已配置 Agent。</div>
               )}
             </div>
           </div>
 
           {/* Name input */}
           <div className="apd-section">
-            <label className="apd-label" htmlFor="apd-name">Name</label>
+            <label className="apd-label" htmlFor="apd-name">名称</label>
             <input
               id="apd-name"
               type="text"
               value={name}
               onChange={(e) => setName(e.target.value)}
-              placeholder="e.g. Auth Refactor"
+              placeholder="例如：认证重构"
               required
               className="apd-input"
               autoFocus
@@ -205,13 +205,13 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
             <label className="apd-label" htmlFor="apd-task">
               <MessageSquare size={12} />
               Task
-              <span className="apd-label-hint">optional</span>
+              <span className="apd-label-hint">可选</span>
             </label>
             <textarea
               id="apd-task"
               value={task}
               onChange={(e) => setTask(e.target.value)}
-              placeholder="Describe what this agent should work on..."
+              placeholder="描述该 Agent 需要完成的工作..."
               rows={5}
               className="apd-input apd-textarea"
             />
@@ -226,7 +226,7 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
                 className={`apd-option-chip${isolation === 'worktree' ? ' apd-option-chip--active' : ''}`}
               >
                 {isolation === 'worktree' ? <GitBranch size={13} /> : <Share2 size={13} />}
-                {isolation === 'worktree' ? 'Worktree' : 'Shared'}
+                {isolation === 'worktree' ? 'Worktree' : '共享'}
               </button>
 
               <button
@@ -236,7 +236,7 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
                 aria-pressed={yolo}
               >
                 <Zap size={13} />
-                YOLO {yolo ? 'ON' : 'OFF'}
+                YOLO {yolo ? '开' : '关'}
               </button>
             </div>
           </div>

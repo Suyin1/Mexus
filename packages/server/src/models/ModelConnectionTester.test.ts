@@ -32,7 +32,7 @@ describe('testModelProviderConnection', () => {
 
     const result = await testModelProviderConnection(provider({ base_url: 'https://example.test' }), model())
 
-    expect(result).toEqual({ ok: false, message: 'Select a provider format before testing.' })
+    expect(result).toEqual({ ok: false, message: '请先选择 provider 格式再测试。' })
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
@@ -44,7 +44,7 @@ describe('testModelProviderConnection', () => {
       base_url: 'https://llm.example.test/v1',
     }))
 
-    expect(result).toEqual({ ok: false, message: 'Select a model before testing.' })
+    expect(result).toEqual({ ok: false, message: '请先选择模型再测试。' })
     expect(fetchMock).not.toHaveBeenCalled()
   })
 
@@ -58,7 +58,7 @@ describe('testModelProviderConnection', () => {
     }), model({ id: 'gpt-test' }))
 
     expect(result.ok).toBe(true)
-    expect(result.message).toBe('Connection succeeded for gpt-test.')
+    expect(result.message).toBe('gpt-test 连接成功。')
     expect(fetchMock).toHaveBeenCalledWith('https://llm.example.test/v1/chat/completions', expect.objectContaining({
       method: 'POST',
       headers: expect.objectContaining({ authorization: 'Bearer direct-key' }),

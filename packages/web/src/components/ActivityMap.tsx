@@ -129,7 +129,7 @@ export function ActivityMap() {
         setDepGraph(graph)
       }
     } catch (err) {
-      console.error('Failed to fetch dependency graph:', err)
+      console.error('获取依赖图失败:', err)
     } finally {
       if (useConnectionStore.getState().activeTarget?.serverId === requestTarget.serverId) {
         setLoading(false)
@@ -276,8 +276,8 @@ export function ActivityMap() {
               <div className="orbit-dot orbit-dot--2" />
               <div className="orbit-dot orbit-dot--3" />
             </div>
-            <span style={{ fontSize: 'var(--font-lg)' }}>Waiting for agent activity...</span>
-            <span style={{ fontSize: 'var(--font-xs)' }}>File operations will appear here in real-time</span>
+            <span style={{ fontSize: 'var(--font-lg)' }}>等待 Agent 活动...</span>
+            <span style={{ fontSize: 'var(--font-xs)' }}>文件操作将实时显示在这里</span>
           </div>
         )}
       </div>
@@ -304,7 +304,7 @@ export function ActivityMap() {
             userSelect: 'none',
           }}
         >
-          <span style={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}>Timeline</span>
+          <span style={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}>时间线</span>
 
           {activePaneList.length > 1 && (
             <>
@@ -357,7 +357,7 @@ export function ActivityMap() {
 
         {filteredActivities.length === 0 ? (
           <div style={{ padding: '8px 12px', fontSize: 'var(--font-xs)', color: 'var(--text-muted)' }}>
-            {filterPaneId ? 'No activity for this agent' : 'No activity yet'}
+            {filterPaneId ? '该 Agent 暂无活动' : '暂无活动'}
           </div>
         ) : (
           filteredActivities.slice(0, 30).map((entry) => (

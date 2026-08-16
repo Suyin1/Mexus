@@ -218,7 +218,7 @@ export class WorktreeManager {
   async merge(paneId: string): Promise<{ success: boolean; message: string }> {
     const entry = this.worktrees.get(paneId)
     if (!entry) {
-      return { success: false, message: 'Worktree not found for this pane' }
+      return { success: false, message: '未找到该执行面板的 worktree' }
     }
 
     const wtGit = simpleGit(entry.path)
@@ -238,7 +238,7 @@ export class WorktreeManager {
       // Check if there are any commits to merge
       const log = await wtGit.log([`${entry.baseBranch}..${entry.branch}`])
       if (log.total === 0) {
-        return { success: false, message: 'No changes to merge' }
+        return { success: false, message: '没有可合并的变更' }
       }
 
       // Merge from main repo (not worktree) to avoid "can't merge into checked-out branch" issue
@@ -246,7 +246,7 @@ export class WorktreeManager {
 
       return {
         success: true,
-        message: `Merged ${log.total} commit${log.total !== 1 ? 's' : ''} from ${entry.branch} into ${entry.baseBranch}`,
+        message: `已将 ${entry.branch} 的 ${log.total} 个提交合并到 ${entry.baseBranch}`,
       }
     } catch (err) {
       // If merge failed due to conflict, abort it
@@ -257,7 +257,7 @@ export class WorktreeManager {
       }
       return {
         success: false,
-        message: `Merge conflict: ${(err as Error).message}`,
+        message: `合并冲突: ${(err as Error).message}`,
       }
     }
   }
@@ -268,7 +268,7 @@ export class WorktreeManager {
   async discard(paneId: string): Promise<{ success: boolean; message: string }> {
     const entry = this.worktrees.get(paneId)
     if (!entry) {
-      return { success: false, message: 'Worktree not found for this pane' }
+      return { success: false, message: '未找到该执行面板的 worktree' }
     }
 
     const branch = entry.branch
@@ -281,7 +281,7 @@ export class WorktreeManager {
     }
 
     this.worktrees.delete(paneId)
-    return { success: true, message: `Discarded branch ${branch}` }
+    return { success: true, message: `已丢弃分支 ${branch}` }
   }
 
   getWorktreePath(paneId: string): string | undefined {

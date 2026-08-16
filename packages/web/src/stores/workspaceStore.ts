@@ -142,10 +142,10 @@ interface WorkspaceStore {
 
 function getInitialTabs(): EditorTab[] {
   return [
-    { id: 'tab:activity', type: 'activity', label: 'Activity', pinned: true },
-    { id: 'tab:team', type: 'team', label: 'Team', pinned: true },
-    { id: 'review:workspace', type: 'review', label: 'Review', pinned: true },
-    { id: 'tab:replay', type: 'replay', label: 'Replay', pinned: true },
+    { id: 'tab:activity', type: 'activity', label: '活动', pinned: true },
+    { id: 'tab:team', type: 'team', label: '团队', pinned: true },
+    { id: 'review:workspace', type: 'review', label: '审查', pinned: true },
+    { id: 'tab:replay', type: 'replay', label: '回放', pinned: true },
   ]
 }
 
@@ -466,7 +466,7 @@ export const useWorkspaceStore = create<WorkspaceStore>((set) => ({
   addActivity: (paneId, activity) =>
     set((state) => {
       const pane = state.panes.find((p) => p.id === paneId)
-      const paneName = pane?.name || 'Workspace'
+      const paneName = pane?.name || '工作区'
       const agent = pane?.agent || 'workspace'
       const entry: ActivityEntry = {
         id: `act-${++activitySeq}`,
@@ -513,7 +513,7 @@ export const useWorkspaceStore = create<WorkspaceStore>((set) => ({
       const entry: ActivityEntry = {
         id: `act-${++activitySeq}`,
         paneId: pane?.id || '__workspace__',
-        paneName: pane?.name || 'Workspace',
+        paneName: pane?.name || '工作区',
         agent: pane?.agent || 'workspace',
         file: activity.file,
         action: activity.action,
@@ -553,7 +553,7 @@ export const useWorkspaceStore = create<WorkspaceStore>((set) => ({
         if (existing) {
           return { activeTabId: existing.id }
         }
-        const tab: EditorTab = { id: 'review:workspace', type: 'review', label: 'Review', pinned: true }
+        const tab: EditorTab = { id: 'review:workspace', type: 'review', label: '审查', pinned: true }
         return { tabs: [tab, ...state.tabs], activeTabId: tab.id }
       }
       // Open/focus a worktree pane review tab
@@ -562,7 +562,7 @@ export const useWorkspaceStore = create<WorkspaceStore>((set) => ({
       if (existing) {
         return { activeTabId: existing.id }
       }
-      const tab: EditorTab = { id: tabId, type: 'review', label: paneName || 'Review', paneId }
+      const tab: EditorTab = { id: tabId, type: 'review', label: paneName || '审查', paneId }
       return { tabs: [...state.tabs, tab], activeTabId: tab.id }
     }),
 
@@ -570,17 +570,17 @@ export const useWorkspaceStore = create<WorkspaceStore>((set) => ({
     set((state) => {
       const existing = state.tabs.find((t) => t.id === 'tab:replay')
       if (existing) {
-        if (existing.pinned && existing.label === 'Replay') return state
+        if (existing.pinned && existing.label === '回放') return state
         return {
           tabs: state.tabs.map((tab) => (
             tab.id === 'tab:replay'
-              ? { ...tab, label: 'Replay', pinned: true }
+              ? { ...tab, label: '回放', pinned: true }
               : tab
           )),
         }
       }
 
-      const replayTab: EditorTab = { id: 'tab:replay', type: 'replay', label: 'Replay', pinned: true }
+      const replayTab: EditorTab = { id: 'tab:replay', type: 'replay', label: '回放', pinned: true }
       const reviewIndex = state.tabs.findIndex((tab) => tab.id === 'review:workspace')
       if (reviewIndex === -1) return { tabs: [...state.tabs, replayTab] }
       return {
@@ -600,7 +600,7 @@ export const useWorkspaceStore = create<WorkspaceStore>((set) => ({
       const tab: EditorTab = {
         id: tabId,
         type: 'replay',
-        label: sessionId ? 'Replay' : 'Replay History',
+        label: sessionId ? '回放' : '回放历史',
         sessionId,
       }
       return { tabs: [...state.tabs, tab], activeTabId: tab.id }

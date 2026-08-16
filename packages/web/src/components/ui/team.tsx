@@ -43,7 +43,7 @@ export const TaskCard = React.forwardRef<HTMLElement, TaskCardProps>(
   ({ className, refId, to, from, status, scope, request, updated, reviewed, actions, ...props }, ref) => (
     <article ref={ref} className={cn('ui-task-card', `ui-task-card--${taskStatusClass(status)}`, className)} {...props}>
       <div className="ui-task-card__top">
-        <strong>{refId || 'No ref'}</strong>
+        <strong>{refId || '无引用'}</strong>
         <Badge variant={reviewed ? 'success' : 'neutral'}>{reviewed ? 'reviewed' : status}</Badge>
       </div>
       {(to || from) && <div className="ui-task-card__assignment">To {to || 'n/a'} / From {from || 'n/a'}</div>}

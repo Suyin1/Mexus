@@ -129,7 +129,7 @@ function SessionListView({ onSelectSession }: { onSelectSession: (id: string) =>
     return (
       <div className="replay-empty">
         <Clock className="icon-hero" style={{ color: 'var(--text-muted)' }} />
-        <span>Loading sessions...</span>
+        <span>会话加载中...</span>
       </div>
     )
   }
@@ -138,7 +138,7 @@ function SessionListView({ onSelectSession }: { onSelectSession: (id: string) =>
     return (
       <div className="replay-empty">
         <History className="icon-hero" style={{ color: 'var(--text-muted)' }} />
-        <span style={{ fontSize: 'var(--font-lg)' }}>No replay history</span>
+        <span style={{ fontSize: 'var(--font-lg)' }}>暂无回放历史</span>
         <span style={{ fontSize: 'var(--font-xs)', color: 'var(--text-muted)' }}>
           Sessions are recorded automatically when agents run
         </span>
@@ -150,14 +150,14 @@ function SessionListView({ onSelectSession }: { onSelectSession: (id: string) =>
     <div className="replay-session-list">
       <div className="replay-list-header">
         <History className="icon-sm" style={{ color: 'var(--accent-primary)' }} />
-        <span>Session History</span>
+        <span>会话历史</span>
         <span style={{ color: 'var(--text-muted)', fontSize: 'var(--font-xs)', flex: 1 }}>
           {sessions.length} sessions
         </span>
         {sessions.length > 0 && (
           confirmClearAll ? (
             <div style={{ display: 'flex', gap: 'var(--space-sm)', alignItems: 'center' }}>
-              <span style={{ fontSize: 'var(--font-xs)', color: 'var(--text-muted)' }}>Clear all?</span>
+              <span style={{ fontSize: 'var(--font-xs)', color: 'var(--text-muted)' }}>全部清空？</span>
               <button className="replay-clear-btn replay-clear-btn--danger" onClick={clearAllSessions}>
                 Confirm
               </button>
@@ -169,10 +169,10 @@ function SessionListView({ onSelectSession }: { onSelectSession: (id: string) =>
             <button
               className="replay-clear-btn"
               onClick={() => setConfirmClearAll(true)}
-              title="Clear all history"
+              title="清空全部历史"
             >
               <Trash2 size={12} />
-              <span>Clear All</span>
+              <span>全部清空</span>
             </button>
           )
         )}
@@ -196,7 +196,7 @@ function SessionListView({ onSelectSession }: { onSelectSession: (id: string) =>
             <button
               className="replay-delete-btn"
               onClick={(e) => deleteSession(e, session.id)}
-              title="Delete session"
+              title="删除会话"
             >
               <Trash2 size={12} />
             </button>
@@ -237,7 +237,7 @@ function SessionDetailView({ sessionId }: { sessionId: string }) {
     return (
       <div className="replay-empty">
         <Clock className="icon-hero" style={{ color: 'var(--text-muted)' }} />
-        <span>Loading session...</span>
+        <span>会话加载中...</span>
       </div>
     )
   }
@@ -251,7 +251,7 @@ function SessionDetailView({ sessionId }: { sessionId: string }) {
           onClick={() => openReplayTab()}
         >
           <SkipBack size={12} />
-          <span>All Sessions</span>
+          <span>全部会话</span>
         </button>
         <div style={{ flex: 1 }}>
           <div style={{ fontWeight: 600, fontSize: 'var(--font-md)' }}>{session.projectName}</div>
@@ -312,14 +312,14 @@ function SessionDetailView({ sessionId }: { sessionId: string }) {
         <div className="replay-player">
           {loadingTurn ? (
             <div className="replay-empty">
-              <span>Loading turn...</span>
+              <span>回合加载中...</span>
             </div>
           ) : activeTurn ? (
             <TurnPlayer turn={activeTurn} />
           ) : (
             <div className="replay-empty">
               <Play className="icon-hero" style={{ color: 'var(--text-muted)' }} />
-              <span style={{ fontSize: 'var(--font-md)' }}>Select a turn to replay</span>
+              <span style={{ fontSize: 'var(--font-md)' }}>选择一个回合进行回放</span>
             </div>
           )}
         </div>
@@ -558,7 +558,7 @@ function TurnPlayer({ turn }: { turn: ReplayTurn }) {
         <div className="turn-terminal-wrap">
           <div className="turn-terminal-header">
             <Terminal size={12} />
-            <span>Terminal Output</span>
+            <span>终端输出</span>
           </div>
           <div
             ref={termContainerRef}
@@ -570,7 +570,7 @@ function TurnPlayer({ turn }: { turn: ReplayTurn }) {
         <div className="turn-activity">
           <div className="turn-terminal-header">
             <FileText size={12} />
-            <span>File Operations</span>
+            <span>文件操作</span>
           </div>
           <div className="turn-activity-list">
             {activityEvents.map((e, i) => {

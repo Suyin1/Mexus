@@ -40,13 +40,13 @@ type ModelConnectionResult = {
 }
 
 const THEMES = [
-  { id: 'dark-ide', name: 'Dark IDE', desc: 'Brand green accents' },
+  { id: 'dark-ide', name: 'Dark IDE', desc: '品牌绿色点缀' },
   { id: 'github-dark', name: 'GitHub Dark', desc: 'GitHub-style dark' },
   { id: 'dracula', name: 'Dracula', desc: 'Classic Dracula palette' },
-  { id: 'tokyo-night', name: 'Tokyo Night', desc: 'Soft blue tones' },
-  { id: 'catppuccin', name: 'Catppuccin', desc: 'Mocha flavor' },
-  { id: 'nord', name: 'Nord', desc: 'Arctic color palette' },
-  { id: 'light-ide', name: 'Light IDE', desc: 'Clean light theme' },
+  { id: 'tokyo-night', name: 'Tokyo Night', desc: '柔和蓝色调' },
+  { id: 'catppuccin', name: 'Catppuccin', desc: '摩卡风味' },
+  { id: 'nord', name: 'Nord', desc: '极地冷色调' },
+  { id: 'light-ide', name: 'Light IDE', desc: '清爽浅色主题' },
 ]
 
 const FONT_OPTIONS = [
@@ -77,7 +77,7 @@ const AGENT_DISPLAY: Record<string, { name: string; desc: string }> = {
   codex: { name: 'Codex', desc: 'OpenAI CLI coding agent' },
   opencode: { name: 'OpenCode', desc: 'Open-source AI coding agent' },
   'kimi-cli': { name: 'Kimi Code', desc: 'Moonshot AI coding assistant' },
-  qodercli: { name: 'Qoder CLI', desc: 'Qoder coding agent' },
+  qodercli: { name: 'Qoder CLI', desc: 'Qoder 编码 Agent' },
 }
 
 async function readJsonResponse<T>(response: Response, label: string): Promise<T> {
@@ -125,14 +125,14 @@ export function SettingsDialog({ isOpen, onClose, scope = 'server' }: SettingsDi
       const agentsPath = scope === 'hub' ? '/api/hub/agents' : '/api/agents'
       const resolveApi = scope === 'hub' ? hubApi : api
       Promise.all([
-        fetch(resolveApi(configPath)).then((r) => readJsonResponse<GlobalConfig>(r, 'Failed to load settings')),
+        fetch(resolveApi(configPath)).then((r) => readJsonResponse<GlobalConfig>(r, '加载设置失败')),
         fetch(resolveApi(agentsPath)).then((r) => readJsonResponse<Record<string, AgentAvailability>>(r, 'Failed to load agent availability')).catch(() => ({})),
       ]).then(([nextConfig, nextAvailability]) => {
         setConfig(nextConfig)
         setInitialConfig(nextConfig)
         setAvailability(nextAvailability)
       }).catch((err) => {
-        setLoadError((err as Error).message || 'Failed to load settings.')
+        setLoadError((err as Error).message || '加载设置失败。')
       }).finally(() => {
         setLoading(false)
       })
@@ -188,7 +188,7 @@ export function SettingsDialog({ isOpen, onClose, scope = 'server' }: SettingsDi
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(nextConfig),
       })
-      if (!response.ok) throw new Error('Failed to save settings')
+      if (!response.ok) throw new Error('保存设置失败')
       setConfig(nextConfig)
       setSavedFeedback(true)
       setInitialConfig(nextConfig)
@@ -196,7 +196,7 @@ export function SettingsDialog({ isOpen, onClose, scope = 'server' }: SettingsDi
       setInitialFont(fontValue)
       return true
     } catch {
-      setSaveError('Failed to save settings.')
+      setSaveError('保存设置失败。')
       return false
     }
     finally {
@@ -283,7 +283,7 @@ export function SettingsDialog({ isOpen, onClose, scope = 'server' }: SettingsDi
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({ provider, model }),
     })
-    return readJsonResponse<ModelConnectionResult>(response, 'Failed to test model provider')
+    return readJsonResponse<ModelConnectionResult>(response, '测试模型 Provider 失败')
   }, [scope])
 
   if (!isOpen) return null
@@ -296,10 +296,10 @@ export function SettingsDialog({ isOpen, onClose, scope = 'server' }: SettingsDi
   ))
 
   const tabs: Array<{ id: SettingsTab; label: string; description: string; icon: React.ReactNode }> = [
-    { id: 'general', label: 'General', description: 'Interface defaults', icon: <Settings size={15} /> },
-    { id: 'models', label: 'Models', description: 'Providers and tool model', icon: <Server size={15} /> },
+    { id: 'general', label: '常规', description: '界面默认设置', icon: <Settings size={15} /> },
+    { id: 'models', label: '模型', description: 'Provider 与工具模型', icon: <Server size={15} /> },
     { id: 'agents', label: 'Agents', description: 'CLI execution profiles', icon: <Bot size={15} /> },
-    { id: 'shortcuts', label: 'Shortcuts', description: 'Keyboard reference', icon: <Keyboard size={15} /> },
+    { id: 'shortcuts', label: '快捷键', description: '键盘参考', icon: <Keyboard size={15} /> },
   ]
 
   return (
@@ -307,19 +307,19 @@ export function SettingsDialog({ isOpen, onClose, scope = 'server' }: SettingsDi
       <div className="settings-shell">
         <header className="settings-header">
           <div className="settings-title-block">
-            <div className="settings-kicker">{scope === 'hub' ? 'Hub control plane' : 'Workspace control plane'}</div>
+            <div className="settings-kicker">{scope === 'hub' ? 'Hub 控制面' : '工作区控制面'}</div>
             <div className="settings-title-row">
               <Settings className="icon-md settings-title-icon" />
               <h1>{scope === 'hub' ? 'Mexus Settings' : 'Settings'}</h1>
             </div>
             <div className={`settings-subtitle ${saveError ? 'settings-subtitle--error' : ''}`}>
-              {loading ? 'Loading settings...'
+              {loading ? '设置加载中...'
                 : saveError ? saveError
-                  : savedFeedback ? 'Changes saved.'
-                    : dirty ? 'Unsaved changes'
+                  : savedFeedback ? '更改已保存。'
+                    : dirty ? '有未保存的更改'
                       : scope === 'hub'
-                        ? 'Global preferences, model routing, and agent execution configuration.'
-                        : 'Workspace preferences, model routing, and agent execution configuration.'}
+                        ? '全局偏好、模型路由与 Agent 执行配置。'
+                        : '工作区偏好、模型路由与 Agent 执行配置。'}
             </div>
           </div>
           <div className="settings-header-actions">
@@ -365,13 +365,13 @@ export function SettingsDialog({ isOpen, onClose, scope = 'server' }: SettingsDi
             {!loading && !config && !loadError && (
               <div className="settings-empty-state">
                 <Settings className="icon-lg" />
-                <span>No settings data available.</span>
+                <span>暂无设置数据。</span>
               </div>
             )}
             {loading && (
               <div className="settings-empty-state">
                 <LoaderCircle className="icon-lg settings-spin" />
-                <span>Loading settings...</span>
+                <span>设置加载中...</span>
               </div>
             )}
             {!loading && config && activeTab === 'general' && (
@@ -443,8 +443,8 @@ function GeneralTab({
         <div className="settings-section-header">
           <Palette className="icon-sm" />
           <div>
-            <h3>Theme</h3>
-            <p>Choose the application color system used by workspaces and Hub.</p>
+            <h3>主题</h3>
+            <p>选择工作区和 Hub 使用的应用配色系统。</p>
           </div>
         </div>
         <div className="theme-grid">
@@ -472,8 +472,8 @@ function GeneralTab({
         <div className="settings-section-header">
           <Terminal className="icon-sm" />
           <div>
-            <h3>Terminal Font</h3>
-            <p>Set the monospace face used in terminals, logs, and code-like metadata.</p>
+            <h3>终端字体</h3>
+            <p>设置终端、日志和代码类元数据使用的等宽字体。</p>
           </div>
         </div>
         <div className="font-grid">
@@ -498,15 +498,15 @@ function GeneralTab({
         <div className="settings-section-header">
           <CircleDot className="icon-sm" />
           <div>
-            <h3>Defaults</h3>
-            <p>Baseline runtime behavior for new sessions and mission orchestration.</p>
+            <h3>默认设置</h3>
+            <p>新会话和 Mission 编排的基础运行时行为。</p>
           </div>
         </div>
         <div className="settings-field-list">
           <div className="settings-field settings-field--row">
             <div className="settings-field__copy">
               <Label>Shell</Label>
-              <span>Default shell used when Mexus starts local terminal sessions.</span>
+              <span>Mexus 启动本地终端会话时使用的默认 shell。</span>
             </div>
             <Input
               value={config?.defaults.shell || ''}
@@ -516,8 +516,8 @@ function GeneralTab({
           </div>
           <div className="settings-field settings-field--row">
             <div className="settings-field__copy">
-              <Label>Scrollback Lines</Label>
-              <span>Maximum terminal history retained in memory per pane.</span>
+              <Label>回滚行数</Label>
+              <span>每个面板在内存中保留的最大终端历史量。</span>
             </div>
             <Input
               type="number"
@@ -527,8 +527,8 @@ function GeneralTab({
           </div>
           <div className="settings-field settings-field--row">
             <div className="settings-field__copy">
-              <Label>History Retention</Label>
-              <span>Number of days to keep workspace history.</span>
+              <Label>历史保留</Label>
+              <span>保留工作区历史的天数。</span>
             </div>
             <Input
               type="number"
@@ -538,15 +538,15 @@ function GeneralTab({
           </div>
           <div className="settings-field settings-field--row">
             <div className="settings-field__copy">
-              <Label>Mission Default Agent</Label>
-              <span>Agent selected by default when mission workflows need one.</span>
+              <Label>Mission 默认 Agent</Label>
+              <span>Mission 工作流需要 Agent 时默认选择的 Agent。</span>
             </div>
             <div className="settings-field__control">
               <Select
                 value={missionDefaultAgent}
                 onChange={(e) => onMissionDefaultAgentChange(e.target.value)}
               >
-                <option value="">Not configured</option>
+                <option value="">未配置</option>
                 {missionAgentOptions.map((agentType) => {
                   const display = AGENT_DISPLAY[agentType] || { name: agentType, desc: '' }
                   const installed = availability[agentType]?.installed
@@ -614,8 +614,8 @@ function ShortcutsTab() {
         <div className="settings-section-header">
           <Keyboard className="icon-sm" />
           <div>
-            <h3>Keyboard Shortcuts</h3>
-            <p>Reference for global navigation and pane commands.</p>
+            <h3>键盘快捷键</h3>
+            <p>全局导航和执行面板命令参考。</p>
           </div>
         </div>
         <div className="shortcuts-list">
@@ -746,7 +746,7 @@ function ModelsTab({
     setTestingProvider(key)
     try {
       if (!model) {
-        setTestResults((prev) => ({ ...prev, [key]: { ok: false, message: 'Add a model before testing.' } }))
+        setTestResults((prev) => ({ ...prev, [key]: { ok: false, message: '请先添加模型再测试。' } }))
         return
       }
       const result = await onProviderTestConnection(provider, model)
@@ -754,7 +754,7 @@ function ModelsTab({
     } catch (err) {
       setTestResults((prev) => ({
         ...prev,
-        [key]: { ok: false, message: (err as Error).message || 'Connection test failed.' },
+        [key]: { ok: false, message: (err as Error).message || '连接测试失败。' },
       }))
     } finally {
       setTestingProvider(null)
@@ -816,8 +816,8 @@ function ModelsTab({
         <div className="settings-section-header">
           <Server className="icon-sm" />
           <div>
-            <h3>Mexus Tool Model</h3>
-            <p>Model used by Mexus-owned tooling when an internal model selection is required.</p>
+            <h3>Mexus 工具模型</h3>
+            <p>当需要内部模型选择时，Mexus 自有工具使用的模型。</p>
           </div>
         </div>
         <div className="tool-model-picker">
@@ -827,7 +827,7 @@ function ModelsTab({
               value={selectedToolProviderId}
               onChange={(e) => selectToolProvider(e.target.value)}
             >
-              <option value="">Not configured</option>
+              <option value="">未配置</option>
               {providerEntries
                 .filter(([, provider]) => provider.enabled)
                 .map(([providerId, provider]) => (
@@ -842,7 +842,7 @@ function ModelsTab({
               onChange={(e) => selectToolModel(e.target.value)}
               disabled={!selectedToolProviderId || selectedToolModels.length === 0}
             >
-              <option value="">Not configured</option>
+              <option value="">未配置</option>
               {selectedToolModels.map((model) => (
                 <option key={model.id} value={model.id}>{model.name || model.id}</option>
               ))}
@@ -856,8 +856,8 @@ function ModelsTab({
           <div className="settings-section-header__copy">
             <KeyRound className="icon-sm" />
             <div>
-              <h3>Model Providers</h3>
-              <p>Configure provider endpoints, credentials, proxy behavior, and available models.</p>
+              <h3>模型 Provider</h3>
+              <p>配置 Provider 端点、凭据、代理行为和可用模型。</p>
             </div>
           </div>
           <div className="models-toolbar">
@@ -870,7 +870,7 @@ function ModelsTab({
               disabled={!!draftProvider}
             >
               <Plus size={13} />
-              <span>Add Provider</span>
+              <span>添加 Provider</span>
             </Button>
           </div>
         </div>
@@ -883,16 +883,16 @@ function ModelsTab({
                 <Input
                   value={draftProvider.name}
                   onChange={(e) => updateDraftProvider({ name: e.target.value })}
-                  placeholder="Display name"
+                  placeholder="显示名称"
                 />
               </div>
               <div className="settings-field">
-                <Label>Provider Format</Label>
+                <Label>Provider 格式</Label>
                 <Select
                   value={draftProvider.type}
                   onChange={(e) => updateDraftProvider({ type: e.target.value as ModelProviderType })}
                 >
-                  <option value="">Select format</option>
+                  <option value="">选择格式</option>
                   <option value="openai">OpenAI</option>
                   <option value="anthropic">Anthropic</option>
                 </Select>
@@ -914,12 +914,12 @@ function ModelsTab({
                 type="password"
                 value={draftProvider.api_key}
                 onChange={(e) => updateDraftProvider({ api_key: e.target.value })}
-                placeholder="Stored in local config.yaml"
+                placeholder="存储在本地 config.yaml 中"
               />
             </div>
 
             <div className="settings-field settings-field--inline-toggle">
-              <Label>Provider Enabled</Label>
+              <Label>启用 Provider</Label>
               <ToggleSwitch
                 checked={draftProvider.enabled}
                 onChange={(enabled) => updateDraftProvider({ enabled })}
@@ -928,10 +928,10 @@ function ModelsTab({
 
             <div className="models-subsection">
               <div className="models-subsection__header">
-                <span>Models</span>
+                <span>模型</span>
                 <Button variant="secondary" size="sm" onClick={() => modelAdd(draftProvider, updateDraftProvider)}>
                   <Plus size={13} />
-                  <span>Add Model</span>
+                  <span>添加模型</span>
                 </Button>
               </div>
               <div className="model-row-list">
@@ -951,7 +951,7 @@ function ModelsTab({
                       onChange={(e) => modelUpdate(draftProvider, updateDraftProvider, index, { name: e.target.value })}
                       placeholder="Label"
                     />
-                    <Button variant="ghost" size="icon" onClick={() => modelRemove(draftProvider, updateDraftProvider, index)} title="Remove model">
+                    <Button variant="ghost" size="icon" onClick={() => modelRemove(draftProvider, updateDraftProvider, index)} title="删除模型">
                       <Trash2 size={14} />
                     </Button>
                   </div>
@@ -1007,15 +1007,15 @@ function ModelsTab({
                   <div className="model-provider-card__actions">
                     {isEditing ? (
                       <>
-                        <Button variant="secondary" size="sm" onClick={cancelEditingProvider}>Cancel</Button>
+                        <Button variant="secondary" size="sm" onClick={cancelEditingProvider}>取消</Button>
                         <Button variant="primary" size="sm" onClick={() => void saveEditingProvider()} disabled={saving}>
                           {saving ? 'Saving...' : 'Save'}
                         </Button>
                       </>
                     ) : (
                       <>
-                        <Button variant="secondary" size="sm" onClick={() => startEditingProvider(providerId, provider)}>Edit</Button>
-                        <Button variant="ghost" size="icon" onClick={() => void removeProvider(providerId)} title="Remove provider">
+                        <Button variant="secondary" size="sm" onClick={() => startEditingProvider(providerId, provider)}>编辑</Button>
+                        <Button variant="ghost" size="icon" onClick={() => void removeProvider(providerId)} title="删除 Provider">
                           <Trash2 size={14} />
                         </Button>
                       </>
@@ -1034,12 +1034,12 @@ function ModelsTab({
                         />
                       </div>
                       <div className="settings-field">
-                        <Label>Provider Format</Label>
+                        <Label>Provider 格式</Label>
                         <Select
                           value={cardProvider.type}
                           onChange={(e) => updateEditingProvider({ type: e.target.value as ModelProviderType })}
                         >
-                          <option value="">Select format</option>
+                          <option value="">选择格式</option>
                           <option value="openai">OpenAI</option>
                           <option value="anthropic">Anthropic</option>
                         </Select>
@@ -1061,12 +1061,12 @@ function ModelsTab({
                         type="password"
                         value={cardProvider.api_key}
                         onChange={(e) => updateEditingProvider({ api_key: e.target.value })}
-                        placeholder="Stored in local config.yaml"
+                        placeholder="存储在本地 config.yaml 中"
                       />
                     </div>
 
                     <div className="settings-field settings-field--inline-toggle">
-                      <Label>Provider Enabled</Label>
+                      <Label>启用 Provider</Label>
                       <ToggleSwitch
                         checked={cardProvider.enabled}
                         onChange={(enabled) => updateEditingProvider({ enabled })}
@@ -1075,18 +1075,18 @@ function ModelsTab({
 
                     <div className="model-provider-card__proxy">
                       <div className="settings-field">
-                        <Label>Proxy Mode</Label>
+                        <Label>代理模式</Label>
                         <Select
                           value={cardProvider.proxy.mode}
                           onChange={(e) => updateEditingProvider({ proxy: { ...cardProvider.proxy, mode: e.target.value as ModelProviderConfig['proxy']['mode'] } })}
                         >
-                          <option value="">Select mode</option>
+                          <option value="">选择模式</option>
                           <option value="openai">OpenAI</option>
                           <option value="anthropic">Anthropic</option>
                         </Select>
                       </div>
                       <div className="settings-field">
-                        <Label>Proxy Port</Label>
+                        <Label>代理端口</Label>
                         <Input
                           type="number"
                           value={cardProvider.proxy.port}
@@ -1094,7 +1094,7 @@ function ModelsTab({
                         />
                       </div>
                       <div className="settings-field settings-field--inline-toggle">
-                        <Label>Proxy Enabled</Label>
+                        <Label>启用代理</Label>
                         <ToggleSwitch
                           checked={cardProvider.proxy.enabled}
                           onChange={(enabled) => updateEditingProvider({ proxy: { ...cardProvider.proxy, enabled } })}
@@ -1104,10 +1104,10 @@ function ModelsTab({
 
                     <div className="models-subsection">
                       <div className="models-subsection__header">
-                        <span>Models</span>
+                        <span>模型</span>
                         <Button variant="secondary" size="sm" onClick={() => modelAdd(cardProvider, updateEditingProvider)}>
                           <Plus size={13} />
-                          <span>Add Model</span>
+                          <span>添加模型</span>
                         </Button>
                       </div>
                       <div className="model-row-list">
@@ -1127,7 +1127,7 @@ function ModelsTab({
                               onChange={(e) => modelUpdate(cardProvider, updateEditingProvider, index, { name: e.target.value })}
                               placeholder="Label"
                             />
-                            <Button variant="ghost" size="icon" onClick={() => modelRemove(cardProvider, updateEditingProvider, index)} title="Remove model">
+                            <Button variant="ghost" size="icon" onClick={() => modelRemove(cardProvider, updateEditingProvider, index)} title="删除模型">
                               <Trash2 size={14} />
                             </Button>
                           </div>
@@ -1209,8 +1209,8 @@ function AgentsTab({
         <div className="settings-section-header">
           <Bot className="icon-sm" />
           <div>
-            <h3>Agent Profiles</h3>
-            <p>Configure the CLI binaries and execution flags Mexus can launch.</p>
+            <h3>Agent 配置</h3>
+            <p>配置 Mexus 可启动的 CLI 二进制与执行参数。</p>
           </div>
         </div>
 
@@ -1266,7 +1266,7 @@ function AgentsTab({
 
                     <div className="settings-field-list">
                       <div className="settings-field">
-                        <Label>Binary Path</Label>
+                        <Label>二进制路径</Label>
                         <Input
                           value={agent.bin}
                           onChange={(e) => onAgentUpdate(key, 'bin', e.target.value)}
@@ -1276,14 +1276,14 @@ function AgentsTab({
 
                       <div className="settings-field-row">
                         <div className="settings-field" style={{ flex: 1 }}>
-                          <Label>Continue Flag</Label>
+                          <Label>继续标志</Label>
                           <Input
                             value={agent.continue_flag}
                             onChange={(e) => onAgentUpdate(key, 'continue_flag', e.target.value)}
                           />
                         </div>
                         <div className="settings-field" style={{ flex: 1 }}>
-                          <Label>YOLO Flag</Label>
+                          <Label>YOLO 标志</Label>
                           <Input
                             value={agent.yolo_flag || ''}
                             onChange={(e) => onAgentUpdate(key, 'yolo_flag', e.target.value)}
@@ -1293,7 +1293,7 @@ function AgentsTab({
 
                       <div className="settings-field">
                         <Label style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-sm)' }}>
-                          <span>Statusline Integration</span>
+                          <span>状态栏集成</span>
                           <ToggleSwitch
                             checked={agent.statusline}
                             onChange={(v) => onAgentUpdate(key, 'statusline', v)}
@@ -1305,7 +1305,7 @@ function AgentsTab({
                       </div>
 
                       <div className="settings-field">
-                        <Label>Environment Variables</Label>
+                        <Label>环境变量</Label>
                         <textarea
                           className="ui-input form-textarea"
                           value={envDrafts[key] ?? ''}

@@ -9,7 +9,7 @@ export function MissionAgents({ agents }: MissionAgentsProps) {
   if (!agents) {
     return (
       <section className="mission-panel mission-agents">
-        <div className="mission-empty">No Mission Agent data loaded.</div>
+        <div className="mission-empty">暂无 Mission Agent 数据。</div>
       </section>
     )
   }
@@ -19,11 +19,11 @@ export function MissionAgents({ agents }: MissionAgentsProps) {
       <section className="mission-panel mission-agents">
         <div className="mission-panel-header">
           <div>
-            <h3>Mission Agents</h3>
-            <p>Parser fallback</p>
+            <h3>Mission 成员</h3>
+            <p>解析器降级</p>
           </div>
         </div>
-        <div className="mission-warning">{agents.error || 'Unable to parse agents.md.'}</div>
+        <div className="mission-warning">{agents.error || '无法解析 agents.md。'}</div>
         <pre className="mission-raw-fallback">{agents.raw}</pre>
       </section>
     )
@@ -33,8 +33,8 @@ export function MissionAgents({ agents }: MissionAgentsProps) {
     <section className="mission-panel mission-agents">
       <div className="mission-panel-header">
         <div>
-          <h3>Mission Agents</h3>
-          <p>{agents.agents.length} assigned</p>
+          <h3>Mission 成员</h3>
+          <p>{agents.agents.length} 个已分配</p>
         </div>
         <Users className="icon-sm" style={{ color: 'var(--text-muted)' }} />
       </div>
@@ -50,15 +50,15 @@ export function MissionAgents({ agents }: MissionAgentsProps) {
                   <strong>{agent.name}</strong>
                   <span>Mission Agent</span>
                 </div>
-                <span>{agent.taskCounts.total} tasks</span>
+                <span>{agent.taskCounts.total} 个任务</span>
               </div>
             </div>
             <div className="mission-agent-profile">
-              <p>{agent.responsibility || 'No responsibility recorded.'}</p>
+              <p>{agent.responsibility || '未记录职责。'}</p>
               <div className="mission-agent-counts">
-                <span>{agent.taskCounts.toClaim} to claim</span>
-                <span>{agent.taskCounts.inProgress} active</span>
-                <span>{agent.taskCounts.done} done</span>
+                <span>{agent.taskCounts.toClaim} 待领取</span>
+                <span>{agent.taskCounts.inProgress} 进行中</span>
+                <span>{agent.taskCounts.done} 已完成</span>
               </div>
             </div>
           </article>

@@ -254,7 +254,7 @@ export function parseMissionKanban(markdown: string): MissionKanbanParseResult {
     const tasks: MissionKanbanTask[] = []
     const missing = STATUS_HEADINGS.filter((status) => sectionAfterHeading(markdown, status) === null)
     if (missing.length > 0) {
-      return { ok: false, raw: markdown, error: `Missing kanban status section: ${missing.join(', ')}`, tasks: [], counts: { ...EMPTY_COUNTS } }
+      return { ok: false, raw: markdown, error: `缺少 kanban 状态分区: ${missing.join(', ')}`, tasks: [], counts: { ...EMPTY_COUNTS } }
     }
 
     for (const status of STATUS_HEADINGS) {
@@ -270,7 +270,7 @@ export function parseMissionKanban(markdown: string): MissionKanbanParseResult {
     }
 
     if (tasks.length === 0) {
-      return { ok: false, raw: markdown, error: 'No kanban task blocks found in status sections.', tasks: [], counts: { ...EMPTY_COUNTS } }
+      return { ok: false, raw: markdown, error: '在状态分区中未找到 kanban 任务块。', tasks: [], counts: { ...EMPTY_COUNTS } }
     }
 
     return { ok: true, raw: markdown, tasks, counts: countTasks(tasks) }
@@ -278,7 +278,7 @@ export function parseMissionKanban(markdown: string): MissionKanbanParseResult {
     return {
       ok: false,
       raw: markdown,
-      error: error instanceof Error ? error.message : 'Unable to parse kanban markdown.',
+      error: error instanceof Error ? error.message : '无法解析 kanban Markdown。',
       tasks: [],
       counts: { ...EMPTY_COUNTS },
     }
@@ -351,7 +351,7 @@ export function parseMissionAgents(markdown: string, tasks: MissionKanbanTask[] 
     }
 
     if (agents.length === 0) {
-      return { ok: false, raw: markdown, error: 'No mission agents found.', agents: [] }
+      return { ok: false, raw: markdown, error: '未找到 Mission 成员。', agents: [] }
     }
 
     return { ok: true, raw: markdown, agents }
@@ -359,7 +359,7 @@ export function parseMissionAgents(markdown: string, tasks: MissionKanbanTask[] 
     return {
       ok: false,
       raw: markdown,
-      error: error instanceof Error ? error.message : 'Unable to parse mission agents markdown.',
+      error: error instanceof Error ? error.message : '无法解析 Mission 成员 Markdown。',
       agents: [],
     }
   }
@@ -369,7 +369,7 @@ export function parseSquadLeadLog(markdown: string): SquadLeadLogParseResult {
   try {
     const section = sectionAfterHeading(markdown, 'Work Log')
     if (section === null) {
-      return { ok: false, raw: markdown, error: 'No Work Log section found in squad-lead.md.', entries: [] }
+      return { ok: false, raw: markdown, error: '未在 squad-lead.md 中找到 Work Log 分区。', entries: [] }
     }
 
     const sectionStart = markdown.indexOf(section)
@@ -391,7 +391,7 @@ export function parseSquadLeadLog(markdown: string): SquadLeadLogParseResult {
     }
 
     if (entries.length === 0) {
-      return { ok: false, raw: markdown, error: 'No Work Log entries found in squad-lead.md.', entries: [] }
+      return { ok: false, raw: markdown, error: '未在 squad-lead.md 中找到 Work Log 条目。', entries: [] }
     }
 
     return { ok: true, raw: markdown, entries }
@@ -399,7 +399,7 @@ export function parseSquadLeadLog(markdown: string): SquadLeadLogParseResult {
     return {
       ok: false,
       raw: markdown,
-      error: error instanceof Error ? error.message : 'Unable to parse Squad Lead work log.',
+      error: error instanceof Error ? error.message : '无法解析 Squad Lead 工作日志。',
       entries: [],
     }
   }
@@ -491,7 +491,7 @@ export const useMissionStore = create<MissionStore>((set) => ({
       const missions = normalizeMissionList(await fetchJson<MissionSummary[] | { missions?: MissionSummary[] }>('/api/missions'))
       set({ missions, isLoading: false })
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : 'Unable to load missions.', isLoading: false })
+      set({ error: error instanceof Error ? error.message : '无法加载 Mission 列表。', isLoading: false })
     }
   },
 
@@ -501,7 +501,7 @@ export const useMissionStore = create<MissionStore>((set) => ({
       const activeMission = normalizeMissionDetails(await fetchJson<MissionDetails | { mission?: MissionDetails }>('/api/missions/active'))
       set({ activeMission, selectedMission: activeMission, ...deriveMissionState(activeMission), isLoading: false })
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : 'Unable to load active mission.', activeMission: null, selectedMission: null, kanban: null, agents: null, squadLeadLog: null, overview: null, isLoading: false })
+      set({ error: error instanceof Error ? error.message : '无法加载当前激活的 Mission。', activeMission: null, selectedMission: null, kanban: null, agents: null, squadLeadLog: null, overview: null, isLoading: false })
     }
   },
 
@@ -512,7 +512,7 @@ export const useMissionStore = create<MissionStore>((set) => ({
       const selectedMission = normalizeMissionDetails(await fetchJson<MissionDetails | { mission?: MissionDetails }>(`/api/missions/${encodeURIComponent(name)}`))
       set({ selectedMission, ...deriveMissionState(selectedMission), ...(silent ? {} : { isLoading: false }) })
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : 'Unable to load mission.', ...(silent ? {} : { isLoading: false }) })
+      set({ error: error instanceof Error ? error.message : '无法加载 Mission。', ...(silent ? {} : { isLoading: false }) })
     }
   },
 
@@ -542,7 +542,7 @@ export const useMissionStore = create<MissionStore>((set) => ({
         set((state) => ({ activeMission: state.selectedMission, isLoading: false }))
       }
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : 'Unable to activate mission.', isLoading: false })
+      set({ error: error instanceof Error ? error.message : '无法激活 Mission。', isLoading: false })
     }
   },
 
@@ -557,7 +557,7 @@ export const useMissionStore = create<MissionStore>((set) => ({
       set({ isLoading: false })
       return true
     } catch (error) {
-      set({ error: error instanceof Error ? error.message : 'Unable to create mission.', isLoading: false })
+      set({ error: error instanceof Error ? error.message : '无法创建 Mission。', isLoading: false })
       return false
     }
   },

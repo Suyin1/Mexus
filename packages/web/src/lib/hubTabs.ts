@@ -49,7 +49,7 @@ export function createHubTab(instance: HubInstanceRecord): HubTab {
 export function formatShortPath(cwd: string): string {
   const parts = cwd.split('/').filter(Boolean)
   if (parts.length >= 2) return parts.slice(-2).join('/')
-  return cwd || '(unknown)'
+  return cwd || '（未知）'
 }
 
 export function safeLoadHubTabStorage(storage: Storage = window.localStorage): HubTabStorage | null {

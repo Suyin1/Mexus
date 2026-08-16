@@ -146,11 +146,11 @@ function ContextBar({ pct }: { pct: number }) {
 // ── Status Badge ──
 
 const STATUS_STYLES: Record<string, { bg: string; color: string; label: string }> = {
-  running: { bg: 'color-mix(in srgb, var(--status-running) 15%, transparent)', color: 'var(--status-running)', label: 'Running' },
-  waiting: { bg: 'color-mix(in srgb, var(--status-waiting) 15%, transparent)', color: 'var(--status-waiting)', label: 'Waiting' },
-  idle: { bg: 'var(--bg-surface)', color: 'var(--text-muted)', label: 'Idle' },
-  stopped: { bg: 'var(--bg-surface)', color: 'var(--text-muted)', label: 'Stopped' },
-  error: { bg: 'color-mix(in srgb, var(--status-error) 15%, transparent)', color: 'var(--status-error)', label: 'Error' },
+  running: { bg: 'color-mix(in srgb, var(--status-running) 15%, transparent)', color: 'var(--status-running)', label: '运行中' },
+  waiting: { bg: 'color-mix(in srgb, var(--status-waiting) 15%, transparent)', color: 'var(--status-waiting)', label: '等待中' },
+  idle: { bg: 'var(--bg-surface)', color: 'var(--text-muted)', label: '空闲' },
+  stopped: { bg: 'var(--bg-surface)', color: 'var(--text-muted)', label: '已停止' },
+  error: { bg: 'color-mix(in srgb, var(--status-error) 15%, transparent)', color: 'var(--status-error)', label: '错误' },
 }
 
 // ── Agent Card ──
@@ -323,7 +323,7 @@ export function AgentDashboard() {
           fontSize: 'var(--font-sm)',
         }}
       >
-        No execution panes running
+        没有运行中的执行面板
       </div>
     )
   }

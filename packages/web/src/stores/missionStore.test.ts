@@ -134,7 +134,7 @@ Integrate Agent Team Mission Workflow into Mexus Hub connected workspace view.
     expect(result.ok).toBe(false)
     expect(result.tasks).toEqual([])
     expect(result.raw).toBe('No kanban headings here')
-    expect(result.error).toMatch(/status/i)
+    expect(result.error).toMatch(/分区/i)
   })
 
   it('reports source lines for duplicate task blocks independently', () => {

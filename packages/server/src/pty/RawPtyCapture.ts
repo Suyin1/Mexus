@@ -39,7 +39,7 @@ export class RawPtyCapture {
     } catch (error) {
       if (!this.warned) {
         this.warned = true
-        console.warn('[PTY] Raw terminal capture failed:', error)
+        console.warn('[PTY] 原始终端捕获失败:', error)
       }
     }
   }

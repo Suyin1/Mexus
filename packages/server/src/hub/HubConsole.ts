@@ -55,7 +55,7 @@ function buildSnapshot(options: HubConsoleOptions): HubConsoleSnapshot {
     registryPath: registryPath(),
     logDir: options.logDir,
     warnings: [
-      ...(!process.env.PATH ? ['PATH is empty; agent detection may fail'] : []),
+      ...(!process.env.PATH ? ['PATH 为空；Agent 检测可能失败'] : []),
     ],
   }
 }
@@ -64,11 +64,11 @@ function renderPlain(options: HubConsoleOptions): string {
   const instances = listInstances()
   const running = instances.filter((instance) => instance.status === 'running').length
   return [
-    `Mexus Hub running at http://localhost:${options.port}`,
+    `Mexus Hub 正在运行，地址 http://localhost:${options.port}`,
     `  PID: ${process.pid}`,
-    `  Projects: ${running} running / ${instances.length} tracked`,
-    `  Registry: ${registryPath()}`,
-    `  Logs: ${options.logDir}`,
+    `  项目: ${running} 运行中 / ${instances.length} 已跟踪`,
+    `  注册表: ${registryPath()}`,
+    `  日志: ${options.logDir}`,
   ].join('\n')
 }
 

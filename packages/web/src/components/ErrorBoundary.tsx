@@ -32,7 +32,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
         overflow: 'auto',
         zIndex: 999999,
       }}>
-        <h1 style={{ color: '#F85149', marginTop: 0, fontSize: 18 }}>Mexus crashed</h1>
+        <h1 style={{ color: '#F85149', marginTop: 0, fontSize: 18 }}>Mexus 发生崩溃</h1>
         <div style={{ marginBottom: 12 }}>{error.name}: {error.message}</div>
         {error.stack && (
           <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', background: '#0d0d0d', padding: 12, borderRadius: 6, border: '1px solid #333' }}>
@@ -41,7 +41,7 @@ export class ErrorBoundary extends Component<{ children: ReactNode }, State> {
         )}
         {info?.componentStack && (
           <>
-            <div style={{ marginTop: 16, marginBottom: 6, color: '#F0883E' }}>Component stack:</div>
+            <div style={{ marginTop: 16, marginBottom: 6, color: '#F0883E' }}>组件堆栈:</div>
             <pre style={{ whiteSpace: 'pre-wrap', wordBreak: 'break-word', background: '#0d0d0d', padding: 12, borderRadius: 6, border: '1px solid #333' }}>
               {info.componentStack}
             </pre>

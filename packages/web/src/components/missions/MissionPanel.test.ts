@@ -14,9 +14,9 @@ describe('MissionPanel onboarding placeholder data', () => {
   it('previews the required kanban and agent layout', () => {
     expect(MISSION_ONBOARDING_KANBAN_COLUMNS).toHaveLength(3)
     expect(MISSION_ONBOARDING_KANBAN_COLUMNS.map((column) => column.title)).toEqual([
-      'To Claim',
-      'In Progress',
-      'Done',
+      '待领取',
+      '进行中',
+      '已完成',
     ])
     expect(MISSION_ONBOARDING_KANBAN_COLUMNS.every((column) => column.cards.length >= 2)).toBe(true)
     expect(MISSION_ONBOARDING_AGENTS.length).toBeGreaterThanOrEqual(2)
@@ -33,8 +33,8 @@ describe('MissionPanel onboarding placeholder data', () => {
 
     const html = renderToStaticMarkup(createElement(MissionPanel))
 
-    expect(html).toContain('No Missions')
-    expect(html).toContain('New Mission')
+    expect(html).toContain('暂无 Mission')
+    expect(html).toContain('新建 Mission')
     expect(html).not.toContain('Create Mission')
   })
 
@@ -49,10 +49,10 @@ describe('MissionPanel onboarding placeholder data', () => {
 
     const html = renderToStaticMarkup(createElement(MissionPanel))
 
-    expect(html).toContain('Enable Agent Team to dispatch Missions')
+    expect(html).toContain('启用 Agent Team 以分发 Mission')
     expect(html).toContain('claude /plugin install mexus-agent-team')
-    expect(html).toContain('Copy')
-    expect(html).toContain('Dismiss for this session')
+    expect(html).toContain('复制')
+    expect(html).toContain('本次会话不再显示')
   })
 
   it('hides the Enable Agent Team banner once a Mission exists or the plugin is detected', () => {
@@ -90,7 +90,7 @@ describe('MissionPanel onboarding placeholder data', () => {
     expect(agentsIndex).toBeGreaterThan(kanbanIndex)
     expect(logIndex).toBeGreaterThan(agentsIndex)
     expect(source).toContain('mission-tabs')
-    expect(source).toContain('Squad Lead Log')
+    expect(source).toContain('Squad Lead 日志')
     expect(source).toContain("display: 'flex'")
     expect(source).toContain("flexDirection: 'column'")
     expect(source).not.toContain('gridTemplateColumns')

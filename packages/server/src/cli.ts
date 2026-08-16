@@ -30,8 +30,8 @@ export function getSupportedCommands(): string[] {
 // Check Node.js version — node-pty requires Node 22+
 const nodeVersion = parseInt(process.versions.node.split('.')[0], 10)
 if (nodeVersion < 22) {
-  console.error(`Error: Mexus requires Node.js >= 22, but you are running v${process.versions.node}`)
-  console.error(`  Please upgrade: nvm install 22 && nvm use 22`)
+  console.error(`错误: Mexus 需要 Node.js >= 22，但当前运行的是 v${process.versions.node}`)
+  console.error(`  请升级: nvm install 22 && nvm use 22`)
   process.exit(1)
 }
 
@@ -45,29 +45,29 @@ const DEFAULT_HUB_PORT = 7600
 
 function printUsage(commandName: string) {
   console.log(`
-  Usage: ${commandName} [command] [directory]
+  用法: ${commandName} [command] [directory]
 
-  Commands:
-    start [dir]    Start the Mexus server (default)
-    init  [dir]    Initialize .nexus/ config in a project
-    status [dir]   Show workspace status
-    stop           Stop the running server
-    hub            Start Mexus Hub to manage all instances
-    pane           Manage Panes over REST
-    mission        Manage Agent Team Missions over REST
+  命令:
+    start [dir]    启动 Mexus 服务（默认）
+    init  [dir]    在项目中初始化 .nexus/ 配置
+    status [dir]   查看工作区状态
+    stop           停止正在运行的服务
+    hub            启动 Mexus Hub 以管理所有实例
+    pane           通过 REST 管理执行面板
+    mission        通过 REST 管理 Agent Team Mission
 
-  Arguments:
-    dir            Path to the project directory (defaults to cwd)
+  参数:
+    dir            项目目录路径（默认当前目录）
 
-  Environment:
-    NEXUS_PORT     Server port (default: ${DEFAULT_PORT})
-    NEXUS_HUB_PORT Hub dashboard port (default: ${DEFAULT_HUB_PORT})
+  环境变量:
+    NEXUS_PORT     服务端口（默认: ${DEFAULT_PORT}）
+    NEXUS_HUB_PORT Hub 仪表盘端口（默认: ${DEFAULT_HUB_PORT}）
 
-  Examples:
-    ${commandName}                        # Start in current directory
-    ${commandName} ~/projects/my-app      # Start with a specific project
-    ${commandName} start ~/projects/app   # Explicit start command
-    ${commandName} init .                 # Initialize config in cwd
+  示例:
+    ${commandName}                        # 在当前目录启动
+    ${commandName} ~/projects/my-app      # 以指定项目启动
+    ${commandName} start ~/projects/app   # 显式 start 命令
+    ${commandName} init .                 # 在当前目录初始化配置
 `.trimEnd())
 }
 
@@ -98,8 +98,8 @@ function findProjectRoot(startDir: string): string {
 
   // Warn if resolved to HOME — likely a mistake
   if (home && bestMatch === home && startDir === home) {
-    console.warn(`Warning: Running Mexus in HOME directory (${home}).`)
-    console.warn(`  Consider: mexus <project-path>`)
+    console.warn(`警告: 正在 HOME 目录中运行 Mexus (${home}).`)
+    console.warn(`  建议: mexus <project-path>`)
   }
 
   return bestMatch
@@ -112,11 +112,11 @@ function resolveProjectDir(dirArg?: string): string {
   if (dirArg) {
     const resolved = path.resolve(dirArg)
     if (!fs.existsSync(resolved)) {
-      console.error(`Error: directory does not exist: ${resolved}`)
+      console.error(`错误: 目录不存在: ${resolved}`)
       process.exit(1)
     }
     if (!fs.statSync(resolved).isDirectory()) {
-      console.error(`Error: not a directory: ${resolved}`)
+      console.error(`错误: 不是目录: ${resolved}`)
       process.exit(1)
     }
     return resolved
@@ -200,7 +200,7 @@ export async function runCli(options: RunCliOptions): Promise<void> {
       const configManager = new ConfigManager(projectDir)
       configManager.loadGlobalConfig()
       configManager.initWorkspace()
-      console.log(`Initialized .nexus/ in ${projectDir}`)
+      console.log(`已在 ${projectDir} 中初始化 .nexus/`)
       break
     }
 
@@ -209,11 +209,11 @@ export async function runCli(options: RunCliOptions): Promise<void> {
       const configManager = new ConfigManager(projectDir)
       const wsConfig = configManager.loadWorkspaceConfig()
       if (!wsConfig) {
-        console.log('No .nexus/config.yaml found. Run `mexus init` first.')
+        console.log('未找到 .nexus/config.yaml。请先运行 `mexus init`。')
         break
       }
-      console.log(`Workspace: ${wsConfig.name}`)
-      console.log(`Panes: ${wsConfig.panes.length}`)
+      console.log(`工作区: ${wsConfig.name}`)
+      console.log(`执行面板: ${wsConfig.panes.length}`)
       for (const pane of wsConfig.panes) {
         console.log(`  - ${pane.id} [${pane.agent}] ${pane.name}${pane.task ? ` — ${pane.task}` : ''}`)
       }
@@ -225,17 +225,17 @@ export async function runCli(options: RunCliOptions): Promise<void> {
         const port = parseInt(env.NEXUS_PORT || String(DEFAULT_PORT), 10)
         const res = await httpClient.fetch(`http://localhost:${port}/api/health`)
         if (res.ok) {
-          console.log('Sending shutdown signal...')
+          console.log('正在发送关闭信号...')
           process.kill(process.pid, 'SIGTERM')
         }
       } catch {
-        console.log('No running Mexus server found.')
+        console.log('未发现正在运行的 Mexus 服务。')
       }
       break
     }
 
     default:
-      console.error(`Unknown command: ${command}`)
+      console.error(`未知命令: ${command}`)
       printUsage(commandName)
       process.exit(1)
   }
@@ -262,7 +262,7 @@ const isEntrypoint = shouldRunMain(process.argv[1], import.meta.url)
 
 if (isEntrypoint) {
   main().catch((err) => {
-    console.error('Fatal error:', err)
+    console.error('致命错误:', err)
     process.exit(1)
   })
 }

@@ -53,7 +53,7 @@ export class PtyManager {
 
     // Validate cwd exists — posix_spawnp fails if cwd is invalid
     if (!fs.existsSync(cwd)) {
-      console.warn(`[PTY] cwd does not exist: ${cwd}, falling back to ${projectDir}`)
+      console.warn(`[PTY] cwd 不存在: ${cwd}，回退到 ${projectDir}`)
       cwd = fs.existsSync(projectDir) ? projectDir : os.homedir()
     }
 
@@ -62,7 +62,7 @@ export class PtyManager {
     if (!fs.existsSync(resolvedShell)) {
       const fallbacks = ['/bin/zsh', '/bin/bash', '/bin/sh']
       const found = fallbacks.find(s => fs.existsSync(s))
-      console.error(`[PTY] Shell binary not found: ${resolvedShell}, falling back to ${found || '/bin/sh'}`)
+      console.error(`[PTY] 未找到 Shell 二进制: ${resolvedShell}，回退到 ${found || '/bin/sh'}`)
       resolvedShell = found || '/bin/sh'
     }
 
@@ -86,7 +86,7 @@ export class PtyManager {
       ])
       for (const [key, value] of Object.entries(agentDef.env)) {
         if (BLOCKED_ENV_KEYS.has(key)) {
-          console.warn(`[PTY] Ignoring blocked env var from agent config: ${key}`)
+          console.warn(`[PTY] 忽略 Agent 配置中的受限环境变量: ${key}`)
           continue
         }
         // Resolve ${VAR} references from process.env

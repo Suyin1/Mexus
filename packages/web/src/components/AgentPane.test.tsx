@@ -47,11 +47,11 @@ describe('AgentPane header', () => {
       />,
     )
 
-    expect(html).toContain('data-tooltip="Pin to top"')
-    expect(html).toContain('data-tooltip="Edit title"')
-    expect(html).toContain('data-tooltip="Send Ctrl+C (interrupt)"')
-    expect(html).toContain('data-tooltip="Restart (new session)"')
-    expect(html).toContain('data-tooltip="Close"')
+    expect(html).toContain('data-tooltip="置顶"')
+    expect(html).toContain('data-tooltip="编辑标题"')
+    expect(html).toContain('data-tooltip="发送 Ctrl+C（中断）"')
+    expect(html).toContain('data-tooltip="重启（新会话）"')
+    expect(html).toContain('data-tooltip="关闭"')
   })
 
   it('renders an unpin action when the pane is pinned', () => {
@@ -67,7 +67,7 @@ describe('AgentPane header', () => {
       />,
     )
 
-    expect(html).toContain('data-tooltip="Unpin from top"')
+    expect(html).toContain('data-tooltip="取消置顶"')
   })
 
   it('renders the pin action as the rightmost toolbar button', () => {
@@ -82,7 +82,7 @@ describe('AgentPane header', () => {
       />,
     )
 
-    expect(html.indexOf('data-tooltip="Close"')).toBeLessThan(html.indexOf('data-tooltip="Pin to top"'))
+    expect(html.indexOf('data-tooltip="关闭"')).toBeLessThan(html.indexOf('data-tooltip="置顶"'))
   })
 
   it('uses the pane color provided by the parent list', () => {

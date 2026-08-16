@@ -7,7 +7,7 @@ export interface LoadingStateProps extends Omit<React.HTMLAttributes<HTMLDivElem
 }
 
 export const LoadingState = React.forwardRef<HTMLDivElement, LoadingStateProps>(
-  ({ className, title = 'Loading', description, ...props }, ref) => (
+  ({ className, title = '加载中', description, ...props }, ref) => (
     <div ref={ref} className={cn('ui-loading-state', className)} aria-live="polite" {...props}>
       <span className="ui-loading-state__spinner" aria-hidden="true" />
       <div className="ui-loading-state__title">{title}</div>

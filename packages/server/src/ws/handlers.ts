@@ -124,20 +124,20 @@ export function setupWsHandlers(
 
       case 'conversation.send':
         workspaceManager.sendConversationToPane(event.paneId, event.text).catch((err) => {
-          console.error('conversation.send failed:', err)
+          console.error('发送会话消息失败:', err)
         })
         break
 
       case 'pane.create':
         workspaceManager.createPane(event.config).catch((err) => {
-          console.error('pane.create failed:', err)
+          console.error('创建执行面板失败:', err)
           send({ type: 'pane.create.failed', message: err instanceof Error ? err.message : String(err) })
         })
         break
 
       case 'pane.close':
         workspaceManager.closePane(event.paneId).catch((err) => {
-          console.error('pane.close failed:', err)
+          console.error('关闭执行面板失败:', err)
         })
         break
 
@@ -145,7 +145,7 @@ export function setupWsHandlers(
         try {
           workspaceManager.renamePane(event.paneId, event.name)
         } catch (err) {
-          console.error('pane.rename failed:', err)
+          console.error('重命名执行面板失败:', err)
         }
         break
 
@@ -184,37 +184,37 @@ export function setupWsHandlers(
 
       case 'git.accept':
         gitService?.acceptFile(event.file).catch((err) => {
-          console.error('git.accept failed:', err)
+          console.error('git.accept 失败:', err)
         })
         break
 
       case 'git.accept.all':
         gitService?.acceptAll().catch((err) => {
-          console.error('git.accept.all failed:', err)
+          console.error('git.accept.all 失败:', err)
         })
         break
 
       case 'git.discard':
         gitService?.discardFile(event.file).catch((err) => {
-          console.error('git.discard failed:', err)
+          console.error('git.discard 失败:', err)
         })
         break
 
       case 'git.discard.all':
         gitService?.discardAll().catch((err) => {
-          console.error('git.discard.all failed:', err)
+          console.error('git.discard.all 失败:', err)
         })
         break
 
       case 'git.unstage':
         gitService?.unstageFile(event.file).catch((err) => {
-          console.error('git.unstage failed:', err)
+          console.error('git.unstage 失败:', err)
         })
         break
 
       case 'git.unstage.all':
         gitService?.unstageAll().catch((err) => {
-          console.error('git.unstage.all failed:', err)
+          console.error('git.unstage.all 失败:', err)
         })
         break
 

@@ -10,7 +10,7 @@ export function SquadLeadLog({ log, onOpenSource }: SquadLeadLogProps) {
   if (!log) {
     return (
       <section className="mission-panel mission-squad-log">
-        <div className="mission-empty">No Squad Lead work log loaded.</div>
+        <div className="mission-empty">暂无 Squad Lead 工作日志。</div>
       </section>
     )
   }
@@ -20,16 +20,16 @@ export function SquadLeadLog({ log, onOpenSource }: SquadLeadLogProps) {
       <section className="mission-panel mission-squad-log">
         <div className="mission-panel-header">
           <div>
-            <h3>Squad Lead Work Log</h3>
-            <p>Parser fallback</p>
+            <h3>Squad Lead 工作日志</h3>
+            <p>解析器降级</p>
           </div>
           {onOpenSource && (
-            <button className="pane-action-btn" title="Open squad-lead.md" onClick={() => onOpenSource('squad-lead.md')}>
+            <button className="pane-action-btn" title="打开 squad-lead.md" onClick={() => onOpenSource('squad-lead.md')}>
               <ExternalLink className="icon-xs" />
             </button>
           )}
         </div>
-        <div className="mission-warning">{log.error || 'Unable to parse squad-lead.md.'}</div>
+        <div className="mission-warning">{log.error || '无法解析 squad-lead.md。'}</div>
         <pre className="mission-raw-fallback">{log.raw}</pre>
       </section>
     )
@@ -39,11 +39,11 @@ export function SquadLeadLog({ log, onOpenSource }: SquadLeadLogProps) {
     <section className="mission-panel mission-squad-log">
       <div className="mission-panel-header">
         <div>
-          <h3>Squad Lead Work Log</h3>
+          <h3>Squad Lead 工作日志</h3>
           <p>{log.entries.length} entries from squad-lead.md</p>
         </div>
         {onOpenSource ? (
-          <button className="pane-action-btn" title="Open squad-lead.md" onClick={() => onOpenSource('squad-lead.md')}>
+          <button className="pane-action-btn" title="打开 squad-lead.md" onClick={() => onOpenSource('squad-lead.md')}>
             <ExternalLink className="icon-xs" />
           </button>
         ) : (

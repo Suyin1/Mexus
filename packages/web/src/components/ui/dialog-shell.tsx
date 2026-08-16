@@ -18,7 +18,7 @@ export const DialogShell = React.forwardRef<HTMLDivElement, DialogShellProps>(
           {description && <div className="ui-dialog-shell__description">{description}</div>}
         </div>
         {onClose && (
-          <IconButton aria-label="Close dialog" size="sm" onClick={onClose}>
+          <IconButton aria-label="关闭对话框" size="sm" onClick={onClose}>
             ×
           </IconButton>
         )}

@@ -143,7 +143,7 @@ export function EditorTabs({ send, isMaximized = false, onToggleMaximize }: Edit
 
       {/* Content */}
       <div style={{ flex: 1, overflow: 'hidden', minHeight: 0 }}>
-        <Suspense fallback={<div className="editor-tab-loading">Loading...</div>}>
+        <Suspense fallback={<div className="editor-tab-loading">加载中...</div>}>
         {activeTab?.type === 'activity' && (
           <ActivityMap />
         )}

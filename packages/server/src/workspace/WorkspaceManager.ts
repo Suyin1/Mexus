@@ -106,12 +106,12 @@ export class WorkspaceManager {
         try {
           const restored = await this.worktreeManager.restore(paneConfig.id, paneConfig.branch, paneConfig.worktreePath)
           if (!restored) {
-            console.warn(`Skipping worktree pane ${paneConfig.id} (${paneConfig.name}): branch no longer exists`)
+            console.warn(`跳过 worktree 面板 ${paneConfig.id} (${paneConfig.name}): 分支已不存在`)
             failCount++
             continue
           }
         } catch (err) {
-          console.warn(`Skipping worktree pane ${paneConfig.id} (${paneConfig.name}): restore failed:`, (err as Error).message)
+          console.warn(`跳过 worktree 面板 ${paneConfig.id} (${paneConfig.name}): 恢复失败:`, (err as Error).message)
           failCount++
           continue
         }
@@ -125,7 +125,7 @@ export class WorkspaceManager {
           await this.startPaneGitService(paneConfig.id, paneConfig.worktreePath)
         }
       } catch (err) {
-        console.warn(`Skipping stale pane ${paneConfig.id} (${paneConfig.name}):`, (err as Error).message)
+        console.warn(`跳过失效面板 ${paneConfig.id} (${paneConfig.name}):`, (err as Error).message)
         failCount++
       }
     }
@@ -173,7 +173,7 @@ export class WorkspaceManager {
         config.worktreePath = worktreePath
         config.branch = branch
       } catch (err) {
-        console.error(`Failed to create worktree for pane ${id}:`, err)
+        console.error(`为面板 ${id} 创建 worktree 失败:`, err)
         throw err
       }
     }
@@ -196,7 +196,7 @@ export class WorkspaceManager {
       if (isolation === 'worktree') {
         await this.worktreeManager.removeWithBranch(id)
       }
-      console.error(`Failed to create pane ${id}:`, err)
+      console.error(`创建面板 ${id} 失败:`, err)
       throw err
     }
   }
@@ -260,7 +260,7 @@ export class WorkspaceManager {
   async mergeWorktree(paneId: string): Promise<{ success: boolean; message: string }> {
     const pane = this.panes.get(paneId)
     if (!pane || pane.isolation !== 'worktree') {
-      return { success: false, message: 'Pane is not a worktree pane' }
+      return { success: false, message: '该执行面板不是 worktree 面板' }
     }
     return this.worktreeManager.merge(paneId)
   }
@@ -268,7 +268,7 @@ export class WorkspaceManager {
   async discardWorktree(paneId: string): Promise<{ success: boolean; message: string }> {
     const pane = this.panes.get(paneId)
     if (!pane || pane.isolation !== 'worktree') {
-      return { success: false, message: 'Pane is not a worktree pane' }
+      return { success: false, message: '该执行面板不是 worktree 面板' }
     }
 
     // Stop per-pane git service
@@ -556,7 +556,7 @@ export class WorkspaceManager {
       try {
         fn()
       } catch (err) {
-        console.error('[WorkspaceManager] Config write failed:', err)
+        console.error('[WorkspaceManager] 配置写入失败:', err)
       }
     })
   }

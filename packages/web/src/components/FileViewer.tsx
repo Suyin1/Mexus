@@ -70,7 +70,7 @@ export function FileViewer({ filePath }: FileViewerProps) {
 
     fetch(api(`/api/file?path=${encodeURIComponent(filePath)}`))
       .then((res) => {
-        if (!res.ok) throw new Error('Failed to load file')
+        if (!res.ok) throw new Error('加载文件失败')
         return res.json()
       })
       .then((data: { content: string }) => {
@@ -86,7 +86,7 @@ export function FileViewer({ filePath }: FileViewerProps) {
     switch (fileType) {
       case 'markdown':
         return (
-          <Suspense fallback={<div className="editor-tab-loading">Loading preview...</div>}>
+          <Suspense fallback={<div className="editor-tab-loading">预览加载中...</div>}>
             <MarkdownPreview content={content} />
           </Suspense>
         )
@@ -176,7 +176,7 @@ export function FileViewer({ filePath }: FileViewerProps) {
           {!isBinary && content !== null && (
             <button
               onClick={handleCopy}
-              title="Copy full content"
+              title="复制完整内容"
               style={{
                 background: 'var(--bg-overlay)', border: '1px solid var(--border-subtle)',
                 borderRadius: 'var(--radius-sm)', color: 'var(--text-secondary)',
@@ -192,7 +192,7 @@ export function FileViewer({ filePath }: FileViewerProps) {
       {/* Content */}
       <div style={{ flex: 1, overflow: 'auto', minHeight: 0, background: 'var(--bg-base)' }}>
         {loading && (
-          <div style={{ padding: 16, color: 'var(--text-muted)', fontSize: 12 }}>Loading...</div>
+          <div style={{ padding: 16, color: 'var(--text-muted)', fontSize: 12 }}>加载中...</div>
         )}
 
         {error && (

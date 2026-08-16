@@ -52,9 +52,9 @@ export function MissionSelector() {
           aria-haspopup="listbox"
           aria-expanded={menuOpen}
           onClick={() => setMenuOpen((open) => !open)}
-          title={selectedMission?.name || 'No Missions'}
+          title={selectedMission?.name || '暂无 Mission'}
         >
-          <span className="mission-selector-trigger__name">{selectedMission?.name || 'No Missions'}</span>
+          <span className="mission-selector-trigger__name">{selectedMission?.name || '暂无 Mission'}</span>
           {selectedMission && (
             <span className="mission-selector-trigger__state">{lifecycleLabel(selectedMission)}</span>
           )}
@@ -62,7 +62,7 @@ export function MissionSelector() {
         </button>
 
         {menuOpen && (
-          <div className="mission-selector-popover" role="listbox" aria-label="Mission selector">
+          <div className="mission-selector-popover" role="listbox" aria-label="Mission 选择器">
             {missions.map((mission) => {
               const active = mission.name === selectedMission?.name
               return (
@@ -88,14 +88,14 @@ export function MissionSelector() {
       </div>
 
       {selectedMission && selectedMission.lifecycle !== 'active' && !selectedMission.incomplete && (
-        <button className="pane-action-btn" onClick={handleActivate} disabled={isLoading} title="Activate Mission">
+        <button className="pane-action-btn" onClick={handleActivate} disabled={isLoading} title="激活 Mission">
           Activate
         </button>
       )}
 
-      <button className="pane-action-btn" onClick={() => setIsCreateOpen(true)} disabled={isLoading} title="New Mission">
+      <button className="pane-action-btn" onClick={() => setIsCreateOpen(true)} disabled={isLoading} title="新建 Mission">
         <Plus className="icon-xs" />
-        <span>New Mission</span>
+        <span>新建 Mission</span>
       </button>
 
       <MissionCreateDialog isOpen={isCreateOpen} onClose={() => setIsCreateOpen(false)} />

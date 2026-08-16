@@ -192,7 +192,7 @@ export async function buildHubServer(cliEntry: string) {
 
   registerMissionRoutes(fastify, missionService, {
     allowCreate: false,
-    createDisabledMessage: 'Connect to a workspace instance to create Missions',
+    createDisabledMessage: '请先连接到工作区实例以创建 Mission',
   })
 
   await fastify.register(fastifyProxy, {
@@ -231,12 +231,12 @@ export async function buildHubServer(cliEntry: string) {
     const body = request.body as { cwd?: string; port?: number }
     if (!body?.cwd) {
       reply.code(400)
-      return { error: 'cwd is required' }
+      return { error: 'cwd 不能为空' }
     }
     const cwd = path.resolve(body.cwd.replace(/^~(?=\/|$)/, process.env.HOME || ''))
     if (!fs.existsSync(cwd) || !fs.statSync(cwd).isDirectory()) {
       reply.code(400)
-      return { error: `Not a directory: ${cwd}` }
+      return { error: `不是目录: ${cwd}` }
     }
 
     await scanInstances()
@@ -247,11 +247,11 @@ export async function buildHubServer(cliEntry: string) {
         const existing = getInstanceByPort(body.port)
         if (existing?.status === 'running') {
           reply.code(409)
-          return { error: `Port ${body.port} is already used by running server: ${existing.projectName}`, instance: existing }
+          return { error: `端口 ${body.port} 已被运行中的服务占用: ${existing.projectName}`, instance: existing }
         }
         if (!(await isPortFree(body.port))) {
           reply.code(409)
-          return { error: `Port ${body.port} is already in use` }
+          return { error: `端口 ${body.port} 已被占用` }
         }
       }
       assignedPort = body.port || (await findFreePort(7700, 7800))
@@ -267,7 +267,7 @@ export async function buildHubServer(cliEntry: string) {
     if (!ready) {
       reply.code(500)
       return {
-        error: `Server on port ${assignedPort} did not become ready as the requested instance. Check log: ${logPath}`,
+        error: `端口 ${assignedPort} 上的服务未按预期就绪。请检查日志: ${logPath}`,
         pid: child.pid,
         port: assignedPort,
         cwd,
@@ -293,20 +293,20 @@ export async function buildHubServer(cliEntry: string) {
     const port = parseInt(portStr, 10)
     if (!Number.isFinite(port)) {
       reply.code(400)
-      return { error: 'Invalid port' }
+      return { error: '无效的端口' }
     }
 
     const record = getInstanceByPort(port)
     if (!record) {
       reply.code(404)
-      return { error: 'Instance not found' }
+      return { error: '未找到实例' }
     }
     if (record.status === 'running') {
       return { success: true, instance: record }
     }
     if (!fs.existsSync(record.cwd) || !fs.statSync(record.cwd).isDirectory()) {
       reply.code(400)
-      return { error: `Not a directory: ${record.cwd}` }
+      return { error: `不是目录: ${record.cwd}` }
     }
 
     await scanInstances()
@@ -314,20 +314,20 @@ export async function buildHubServer(cliEntry: string) {
     if (refreshed?.status === 'running') {
       if (normalizePathForCompare(refreshed.cwd) !== normalizePathForCompare(record.cwd)) {
         reply.code(409)
-        return { error: `Port ${port} is already used by running server: ${refreshed.projectName}`, instance: refreshed }
+        return { error: `端口 ${port} 已被运行中的服务占用: ${refreshed.projectName}`, instance: refreshed }
       }
       return { success: true, instance: refreshed }
     }
     if (!(await isPortFree(port))) {
       reply.code(409)
-      return { error: `Port ${port} is already in use`, instance: refreshed }
+      return { error: `端口 ${port} 已被占用`, instance: refreshed }
     }
 
     const { child, logPath } = spawnLocalInstance(cliEntry, record.cwd, port)
     const ready = await waitForLocalInstance(port, { pid: child.pid, cwd: record.cwd })
     if (!ready) {
       reply.code(500)
-      return { error: `Server on port ${port} did not become ready as the requested instance. Check log: ${logPath}`, instance: getInstanceByPort(port), logPath }
+      return { error: `端口 ${port} 上的服务未按预期就绪。请检查日志: ${logPath}`, instance: getInstanceByPort(port), logPath }
     }
     const next = {
       ...record,
@@ -346,13 +346,13 @@ export async function buildHubServer(cliEntry: string) {
     const port = parseInt(portStr, 10)
     if (!Number.isFinite(port)) {
       reply.code(400)
-      return { error: 'Invalid port' }
+      return { error: '无效的端口' }
     }
 
     const record = getInstanceByPort(port)
     if (!record) {
       reply.code(404)
-      return { error: 'Instance not found' }
+      return { error: '未找到实例' }
     }
 
     const stopped = await stopLocalInstance(port)
@@ -364,12 +364,12 @@ export async function buildHubServer(cliEntry: string) {
     const port = parseInt(portStr, 10)
     if (!Number.isFinite(port)) {
       reply.code(400)
-      return { error: 'Invalid port' }
+      return { error: '无效的端口' }
     }
     const record = getInstanceByPort(port)
     if (!record) {
       reply.code(404)
-      return { error: 'Instance not found' }
+      return { error: '未找到实例' }
     }
     if (record.status === 'running') {
       await stopLocalInstance(port)
@@ -380,8 +380,8 @@ export async function buildHubServer(cliEntry: string) {
 
   const webDistPath = resolveWebDistPath()
   if (!fs.existsSync(webDistPath)) {
-    console.warn(`  [Warning] Frontend not found at ${webDistPath}`)
-    console.warn(`  Run 'pnpm run build:web' to build the frontend, or use dev mode.`)
+    console.warn(`  [警告] 未找到前端资源，路径 ${webDistPath}`)
+    console.warn(`  请运行 'pnpm run build:web' 构建前端，或使用开发模式。`)
   }
   if (fs.existsSync(webDistPath)) {
     await fastify.register(fastifyStatic, {
@@ -406,7 +406,7 @@ export async function startHub(port: number, cliEntry: string) {
   const shutdown = async (source: string) => {
     if (shuttingDown) return
     shuttingDown = true
-    console.log(`\nMexus Hub shutting down... source=${source}`)
+    console.log(`\nMexus Hub 正在关闭... 来源=${source}`)
     hubConsole.stop()
     await fastify.close()
     process.exit(0)

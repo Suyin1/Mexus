@@ -42,12 +42,12 @@ export function EnableAgentTeamBanner() {
   }
 
   return (
-    <section className="mission-enable-agent-team" aria-label="Enable Agent Team">
+    <section className="mission-enable-agent-team" aria-label="启用 Agent Team">
       <div className="mission-enable-agent-team-icon" aria-hidden="true">
         <PlugZap className="icon-md" />
       </div>
       <div className="mission-enable-agent-team-body">
-        <h3>Enable Agent Team to dispatch Missions</h3>
+        <h3>启用 Agent Team 以分发 Mission</h3>
         <p>
           Install the plugin to give Squad Lead `/mission-create`, `/dispatch`, and related commands.
           You can still create Missions without it, but Squad Lead panes will not have the dispatch command surface.
@@ -56,7 +56,7 @@ export function EnableAgentTeamBanner() {
           <code>{AGENT_TEAM_INSTALL_COMMAND}</code>
           <button type="button" className="pane-action-btn" onClick={copyInstallCommand}>
             {copied ? <Check className="icon-xs" /> : <Copy className="icon-xs" />}
-            <span>{copied ? 'Copied' : 'Copy'}</span>
+            <span>{copied ? '已复制' : '复制'}</span>
           </button>
         </div>
         <button
@@ -64,7 +64,7 @@ export function EnableAgentTeamBanner() {
           className="mission-enable-agent-team-dismiss"
           onClick={() => setDismissed(true)}
         >
-          Dismiss for this session
+          本次会话不再显示
         </button>
       </div>
     </section>

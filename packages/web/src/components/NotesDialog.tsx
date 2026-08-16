@@ -99,7 +99,7 @@ export function NotesDialog({ isOpen, onClose }: NotesDialogProps) {
         <div className="settings-header">
           <div style={{ display: 'flex', alignItems: 'center', gap: 'var(--space-md)' }}>
             <StickyNote className="icon-md" style={{ color: 'var(--accent-primary)' }} />
-            <span style={{ fontSize: 'var(--font-xl)', fontWeight: 600 }}>Notes</span>
+            <span style={{ fontSize: 'var(--font-xl)', fontWeight: 600 }}>笔记</span>
             <span style={{ fontSize: 'var(--font-xs)', color: 'var(--text-muted)' }}>
               {pending.length} pending
             </span>
@@ -120,7 +120,7 @@ export function NotesDialog({ isOpen, onClose }: NotesDialogProps) {
             ref={inputRef}
             className="form-input"
             style={{ flex: 1 }}
-            placeholder="Write down an idea..."
+            placeholder="记录一个想法..."
             value={input}
             onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === 'Enter') addNote() }}
@@ -166,7 +166,7 @@ export function NotesDialog({ isOpen, onClose }: NotesDialogProps) {
               paddingTop: 'var(--space-xxl)',
             }}>
               <StickyNote size={32} style={{ opacity: 0.3 }} />
-              <span style={{ fontSize: 'var(--font-sm)' }}>No notes yet</span>
+              <span style={{ fontSize: 'var(--font-sm)' }}>暂无笔记</span>
             </div>
           )}
 

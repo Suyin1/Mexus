@@ -65,7 +65,7 @@ describe('Hub Mission routes', () => {
     })
 
     expect(response.statusCode).toBe(400)
-    expect(response.json().error).toMatch(/Connect to a workspace instance to create Missions/)
+    expect(response.json().error).toMatch(/请先连接到工作区实例以创建 Mission/)
     await fastify.close()
   })
 })

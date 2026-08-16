@@ -115,7 +115,7 @@ function isMissionName(name: string): boolean {
 
 function assertMissionName(name: string): void {
   if (!isMissionName(name)) {
-    throw new Error(`Invalid Mission name: ${name}`)
+    throw new Error(`无效的 Mission 名称: ${name}`)
   }
 }
 
@@ -186,7 +186,7 @@ export class MissionService {
     assertMissionName(name)
     const summary = this.readSummary(name)
     if (!fs.existsSync(path.join(this.projectDir, summary.path))) {
-      throw new Error(`Mission not found: ${name}`)
+      throw new Error(`未找到 Mission: ${name}`)
     }
 
     const files = this.readMissionFiles(name)
@@ -252,7 +252,7 @@ export class MissionService {
     assertMissionName(name)
     const missionPath = path.join(this.projectDir, missionRelPath(name), 'mission.md')
     if (!fs.existsSync(missionPath)) {
-      throw new Error(`Mission not found: ${name}`)
+      throw new Error(`未找到 Mission: ${name}`)
     }
 
     this.deactivateOtherMissions(name)
@@ -266,7 +266,7 @@ export class MissionService {
     const templates = resolveMissionTemplatePaths(this.projectDir)
     const missionDir = path.join(this.projectDir, missionRelPath(name))
     if (!fs.existsSync(missionDir)) {
-      throw new Error(`Mission not found: ${name}`)
+      throw new Error(`未找到 Mission: ${name}`)
     }
 
     this.ensureRootFiles(templates)
@@ -288,7 +288,7 @@ export class MissionService {
     const sourceDir = path.join(this.projectDir, missionRelPath(name))
     const missionPath = path.join(sourceDir, 'mission.md')
     if (!fs.existsSync(missionPath)) {
-      throw new Error(`Mission not found: ${name}`)
+      throw new Error(`未找到 Mission: ${name}`)
     }
 
     const archivedRel = path.join('agent-team', 'missions', '_archived', name)

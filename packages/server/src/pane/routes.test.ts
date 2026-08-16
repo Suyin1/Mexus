@@ -139,7 +139,7 @@ describe('Pane REST routes', () => {
 
     const missing = await fastify.inject({ method: 'DELETE', url: `/api/panes/${createdPane.id}` })
     expect(missing.statusCode).toBe(404)
-    expect(missing.json().error).toMatch(/Pane not found/)
+    expect(missing.json().error).toMatch(/未找到执行面板/)
 
     await fastify.close()
   })
@@ -160,7 +160,7 @@ describe('Pane REST routes', () => {
     })
 
     expect(response.statusCode).toBe(400)
-    expect(response.json().error).toMatch(/Unknown agent/)
+    expect(response.json().error).toMatch(/未知 Agent/)
     expect(workspaceManager.getPanes()).toEqual([])
     await fastify.close()
   })
