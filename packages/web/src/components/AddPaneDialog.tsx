@@ -99,9 +99,16 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
   const [yolo, setYolo] = useState(false)
   const [agentAvailability, setAgentAvailability] = useState<Record<string, AgentAvailability> | null>(null)
   const [agentChangedByUser, setAgentChangedByUser] = useState(false)
+  const [createError, setCreateError] = useState<string | null>(null)
 
   useEffect(() => {
     if (!isOpen) return
+    setCreateError(null)
+    const handleCreateFailed = (e: Event) => {
+      const { message } = (e as CustomEvent<{ message: string }>).detail
+      setCreateError(message || '创建执行面板失败')
+    }
+    window.addEventListener('nexus-pane-create-failed', handleCreateFailed)
     fetch(api('/api/agents'))
       .then(res => res.json())
       .then(data => {
@@ -112,6 +119,7 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
         }
       })
       .catch(() => {})
+    return () => window.removeEventListener('nexus-pane-create-failed', handleCreateFailed)
   }, [isOpen])
 
   if (!isOpen) return null
@@ -176,7 +184,8 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
                     title={getAgentDisplayName(a)}
                     className={`apd-agent-card${agent === a ? ' apd-agent-card--active' : ''}`}
                   >
-                    <AgentIcon agent={a} size="24px" className="apd-agent-icon" />
+                    <AgentIcon agent={a} size="22px" className="apd-agent-icon" />
+                    <span className="apd-agent-name">{getAgentDisplayName(a)}</span>
                   </button>
                 )
               })}
@@ -240,6 +249,10 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
               </button>
             </div>
           </div>
+
+          {createError && (
+            <div className="apd-error">{createError}</div>
+          )}
 
           {/* Footer actions */}
           <div className="apd-footer">

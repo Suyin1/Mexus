@@ -322,6 +322,31 @@ export class ConfigManager {
   getShell(): string {
     const global = this.loadGlobalConfig()
     const configured = global.defaults.shell
+
+    // Windows: prefer PowerShell (single-quote compatible with bash-style quoting used
+    // by buildAgentCommand), then Git Bash, then cmd.exe (always present via ComSpec).
+    if (process.platform === 'win32') {
+      const candidates = [
+        configured,
+        process.env.SHELL,
+        'C:\\Program Files\\PowerShell\\7\\pwsh.exe',
+        'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe',
+        'C:\\Program Files\\Git\\bin\\bash.exe',
+        'C:\\Program Files\\Git\\usr\\bin\\bash.exe',
+        process.env.ComSpec,
+      ]
+      for (const sh of candidates) {
+        if (!sh) continue
+        try {
+          fs.accessSync(sh)
+          return sh
+        } catch {
+          // try next
+        }
+      }
+      return process.env.ComSpec || 'cmd.exe'
+    }
+
     // Prefer zsh > configured > $SHELL > /bin/sh
     // Include macOS Homebrew paths for Apple Silicon and Intel
     const candidates = [
@@ -343,7 +368,7 @@ export class ConfigManager {
         // try next
       }
     }
-    return '/bin/sh'
+    return process.platform === 'win32' ? (process.env.ComSpec || 'cmd.exe') : '/bin/sh'
   }
 
   /**

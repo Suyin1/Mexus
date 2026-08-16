@@ -57,13 +57,24 @@ export class PtyManager {
       cwd = fs.existsSync(projectDir) ? projectDir : os.homedir()
     }
 
-    // Validate shell binary exists, fall back gracefully
+    // Validate shell binary exists, fall back gracefully (Windows-aware)
     let resolvedShell = shell
     if (!fs.existsSync(resolvedShell)) {
-      const fallbacks = ['/bin/zsh', '/bin/bash', '/bin/sh']
+      const fallbacks = process.platform === 'win32'
+        ? [
+            'C:\\Program Files\\PowerShell\\7\\pwsh.exe',
+            'C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe',
+            'C:\\Program Files\\Git\\bin\\bash.exe',
+            'C:\\Program Files\\Git\\usr\\bin\\bash.exe',
+            process.env.ComSpec || 'C:\\Windows\\System32\\cmd.exe',
+          ]
+        : ['/bin/zsh', '/bin/bash', '/bin/sh']
       const found = fallbacks.find(s => fs.existsSync(s))
-      console.error(`[PTY] 未找到 Shell 二进制: ${resolvedShell}，回退到 ${found || '/bin/sh'}`)
-      resolvedShell = found || '/bin/sh'
+      const lastResort = process.platform === 'win32'
+        ? (process.env.ComSpec || 'cmd.exe')
+        : '/bin/sh'
+      console.error(`[PTY] 未找到 Shell 二进制: ${resolvedShell}，回退到 ${found || lastResort}`)
+      resolvedShell = found || lastResort
     }
 
     const agentDef = this.configManager.getAgentDefinition(config.agent)
