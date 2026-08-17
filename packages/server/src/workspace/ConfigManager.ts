@@ -385,6 +385,19 @@ export class ConfigManager {
       { key: 'qodercli', bin: 'qodercli', installHint: 'See https://docs.qoder.com/zh/cli/using-cli' },
     ]
 
+    // Include custom agents configured in ~/.nexus/config.yaml (e.g. a self-built WebAgent)
+    const configuredKeys = Object.keys(global.agents || {}).filter(
+      (key) => !knownAgents.some((agent) => agent.key === key),
+    )
+    for (const key of configuredKeys) {
+      const def = global.agents[key]
+      knownAgents.push({
+        key,
+        bin: def?.bin || key,
+        installHint: `Configured in ~/.nexus/config.yaml (bin: ${def?.bin || key})`,
+      })
+    }
+
     const checks = await Promise.allSettled(
       knownAgents.map(async (agent) => {
         const def = global.agents[agent.key]

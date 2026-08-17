@@ -9,8 +9,6 @@ interface PaneCreateResponse {
   pane: PaneState
 }
 
-const AGENTS = new Set(['claudecode', 'codex', 'opencode', 'kimi-cli', 'qodercli', 'qwencode'])
-
 export async function runPaneCommand(args: string[], serverUrl: string, client: CliHttpClient, io: CliIo): Promise<void> {
   const [command, ...rest] = args
   switch (command) {
@@ -32,7 +30,6 @@ async function createPane(rawArgs: string[], serverUrl: string, client: CliHttpC
   const args = [...rawArgs]
   const name = requireArg(takeOption(args, '--name'), '缺少 --name')
   const agent = requireArg(takeOption(args, '--agent'), '缺少 --agent')
-  if (!AGENTS.has(agent)) throw new CliError(`未知 Agent: ${agent}`)
   const workdir = takeOption(args, '--workdir')
   const task = takeOption(args, '--task')
   const missionName = takeOption(args, '--mission')

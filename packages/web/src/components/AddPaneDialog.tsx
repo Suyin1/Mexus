@@ -151,8 +151,14 @@ export function AddPaneDialog({ isOpen, onClose, send }: AddPaneDialogProps) {
     onClose()
   }
 
-  const isAgentInstalled = (a: AgentType) => !agentAvailability || agentAvailability[a]?.installed === true
-  const visibleAgentTypes = agentAvailability ? AGENT_TYPES.filter((a) => isAgentInstalled(a)) : AGENT_TYPES
+  const isAgentInstalled = (a: string) => !agentAvailability || agentAvailability[a]?.installed === true
+  const agentKeys = agentAvailability ? Object.keys(agentAvailability) : []
+  const visibleAgentTypes: string[] = agentAvailability
+    ? [
+        ...AGENT_TYPES.filter((a) => isAgentInstalled(a)),
+        ...agentKeys.filter((a) => !AGENT_TYPES.includes(a as AgentType) && isAgentInstalled(a)),
+      ]
+    : AGENT_TYPES
 
   const handleAgentSelect = (nextAgent: AgentType) => {
     setAgentChangedByUser(true)

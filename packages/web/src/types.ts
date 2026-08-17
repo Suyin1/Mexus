@@ -3,7 +3,7 @@
 export type PaneStatus = 'running' | 'waiting' | 'idle' | 'stopped' | 'error'
 export type RestoreMode = 'continue' | 'restart' | 'manual' | 'resume'
 export type ReplayKind = 'head' | 'tail' | 'history'
-export type AgentType = 'claudecode' | 'codex' | 'opencode' | 'kimi-cli' | 'qodercli' | '__shell__'
+export type AgentType = 'claudecode' | 'codex' | 'opencode' | 'kimi-cli' | 'qodercli' | '__shell__' | (string & {})
 export type IsolationMode = 'shared' | 'worktree'
 export type AgentTransport = 'pty' | 'acp'
 export type ModelProviderType = '' | 'openai' | 'anthropic'
