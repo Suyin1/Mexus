@@ -84,7 +84,28 @@ CLI Agent 进程（claude / opencode / codex / ...）
 - **yaml 字段**：`.nexus/config.yaml`、`agents.yaml`、`~/.nexus/config.yaml` 的字段名
 - **发给 Agent 的 prompt 模板**（`pty/agentCommand.ts`、`AddPaneDialog.buildPaneMission`）
 
-## 6. 汉化状态（i18n/zh-cn 分支）
+## 6. 接入自定义 Agent（配置）
+
+Mexus 内置 5 种 Agent 自动检测（claudecode/codex/opencode/kimi-cli/qodercli，检测对应 bin 是否在 PATH）。**其他任何 CLI Agent 都可通过全局配置接入**（`~/.nexus/config.yaml` 的 `agents:` 块），例如自研 WebAgent：
+
+```yaml
+agents:
+  webagent:
+    bin: webagent          # 启动命令名或完整路径
+    continue_flag: ""      # 续跑参数（如 "--continue"）
+    resume_flag: ""        # 恢复会话参数（如 "--resume <id>"）
+    yolo_flag: ""          # 跳过权限确认参数
+    default_args: []       # 固定附加参数
+    statusline: false      # 是否支持 statusline 元数据
+    transport: pty         # pty | acp
+    env: {}                # 注入的环境变量
+```
+
+- `checkAgentAvailability`（`workspace/ConfigManager.ts`）会合并检测配置中的自定义 agent；`/api/agents` 返回全部（内置+自定义）
+- 前端新建面板的 Agent 列表从 `/api/agents` 动态生成，自定义 agent 自动显示（图标回退为首字母标记，名称回退为 key）
+- 创建校验：`pane/routes.ts` 以 `getAgentDefinition(agent)` 是否存在于配置为准，CLI `pane create --agent <key>` 同样可用
+
+## 7. 汉化状态（i18n/zh-cn 分支）
 
 | 范围 | 状态 |
 |---|---|

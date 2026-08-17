@@ -37,56 +37,65 @@ npx pnpm dev:full               # 前后端并行热更新
 
 ---
 
-## 2. Agent 配置：理解「没有可用的已配置Agent」
+## 2. Agent 接入：自动检测与自定义配置
 
-### 2.1 这句话是什么意思？
+### 2.1 内置 Agent：自动检测（无需手动配置）
 
-当你在界面点击新建执行面板（`+` / `Cmd+N`），弹窗会向服务端请求 `/api/agents`，**只显示"已检测到已安装"的 Agent 类型**。如果列表为空，就会显示：
-
-> 没有可用的已配置Agent
-
-### 2.2 为什么会这样？
-
-Mexus 通过检查 **Agent CLI 是否在你的 `PATH` 中**来判断可用性：
+Mexus 内置 5 种常见 Agent 的自动检测。只要对应 CLI 已安装且在 PATH 中，服务启动时会自动识别，**无需手动配置**，UI 新建面板即可见：
 
 | Agent 类型 | 检测的二进制 | 安装方式示例 |
 |---|---|---|
 | Claude Code | `claude` | `npm install -g @anthropic-ai/claude-code` |
 | Codex | `codex` | `npm install -g @openai/codex` |
-| OpenCode | `opencode` | `npm install -g opencode-ai`（或官方安装方式） |
+| OpenCode | `opencode` | `npm install -g opencode-ai` |
 | Kimi CLI | `kimi` | `pip install kimi-cli` |
 | Qoder CLI | `qodercli` | 见官方文档 |
 
-出现「没有可用的已配置Agent」的常见原因：
-1. **本机没有安装任何 Agent CLI**（最常见）——先安装你要用的 Agent
-2. **⚠️ Windows 平台 bug（已修复）**：旧版本用 `which` 检测（Windows 没有此命令），导致全部判定为未安装。**汉化分支 `i18n/zh-cn` 已修复**（Windows 改用 `where`），更新到最新提交后重启服务即可
-3. Agent 装了但不在 PATH 中（如手动解压的二进制）——把它加入 PATH，或手动配置（见 2.3）
+> 例如：新装了 Claude Code（`npm install -g @anthropic-ai/claude-code`）→ 重启 Mexus → 新建面板就会出现 Claude Code，无需任何配置。
 
-### 2.3 如何手动配置 Agent（~/.nexus/config.yaml）
+### 2.2 「没有可用的已配置Agent」是什么意思？
 
-全局配置文件在 `~/.nexus/config.yaml`。自动检测不到的 Agent 可以手动添加：
+新建面板时，弹窗只显示"检测到已安装"的 Agent。列表为空时提示此信息，常见原因：
+1. **本机未安装任何 Agent CLI**（最常见）——先安装你要用的 Agent
+2. **⚠️ Windows 旧版本 bug（已修复）**：旧版用 `which` 检测（Windows 没有此命令）导致全部判定为未安装。汉化分支 `i18n/zh-cn` 已修复，更新到最新提交后重启服务即可
+3. **Agent 已安装但不在 PATH 中**——加入 PATH，或手动配置（见 2.3）
+
+### 2.3 接入自定义 Agent（如自研 WebAgent）⭐
+
+对于内置 5 种之外的 Agent（例如你自研的、在 cmd 里用 `webagent` 命令启动的 WebAgent），需要**在全局配置中手动定义**。配置文件：`~/.nexus/config.yaml`。
+
+在 `agents:` 块下新增一个条目（缩进与现有条目对齐，位于 `mission_defaults:` 之前）：
 
 ```yaml
-version: "1"
-
 agents:
-  opencode:
-    bin: opencode                 # 二进制名或完整路径
-    continue_flag: "--continue"   # 续跑会话用的参数
-    statusline: false
-    transport: pty                # pty 或 acp
-    env:
-      OPENAI_API_KEY: "${OPENAI_API_KEY}"   # 需要传给 Agent 的环境变量
+  # ... 已有的 claudecode / opencode 等（自动检测生成，无需改动）...
+  webagent:                          # ← 自定义 key，会显示在 UI 上
+    bin: webagent                    # cmd 中启动它的命令名（或完整路径）
+    continue_flag: ""                # 续跑会话的参数，如 "--continue"；不支持就留空
+    resume_flag: ""                  # 恢复指定会话的参数，如 "--resume <id>"；不支持就留空
+    yolo_flag: ""                    # 跳过权限确认的参数；不支持就留空
+    default_args: []                 # 每次启动附加的固定参数
+    statusline: false                # 是否支持 statusline 元数据（一般 false）
+    transport: pty                   # pty（终端）或 acp（Agent Client Protocol）
+    env: {}                          # 需要传给它的环境变量，如 { API_KEY: "${API_KEY}" }
 ```
 
-修改后重启服务即可生效。
+保存后**重启服务**，新建面板即可看到 WebAgent 卡片（图标自动用首字母圆形标记，名称显示 `webagent`）。
+
+> **自动检测（2.1）与手动配置（2.3）的区别**：内置 5 种装好即自动出现；自定义 Agent 必须手动在 config.yaml 添加后才可见。
 
 ### 2.4 快速验证
 
 ```bash
-# 查看本机安装了哪些 Agent CLI
-where claude; where opencode; where codex    # Windows
-which claude; which opencode; which codex    # macOS / Linux
+# 1) 确认命令可用
+where webagent                        # Windows（有输出即可用）
+which webagent                        # macOS / Linux
+
+# 2) 重启服务后，检查 API 是否识别（浏览器打开 http://localhost:7700/api/agents）
+#    → 应看到 "webagent": { "installed": true, "bin": "webagent" }
+
+# 3) 用 CLI 直接创建测试面板
+npx tsx packages/server/src/cli.ts pane create --name "测试" --agent webagent --task "..."
 ```
 
 ---
@@ -156,6 +165,9 @@ NEXUS_HUB_PORT=8081 mexus hub  # 自定义 Hub 端口
 
 **Q1：界面提示「没有可用的已配置Agent」怎么办？**
 先安装 Agent CLI（`npm install -g opencode-ai` 等）并确认命令可用；确认使用的是汉化分支最新提交（含 Windows `which`→`where` 修复）；重启服务后重试。仍不行则手动配置 `~/.nexus/config.yaml`（见 2.3）。
+
+**Q2：我想接入自研的 Agent（如 WebAgent，cmd 里输入 `webagent` 可启动），怎么接？**
+完全支持。在 `~/.nexus/config.yaml` 的 `agents:` 块下添加定义（`bin: webagent` 等字段），保存后重启服务，新建面板即可看到它并创建实例。完整教程见上文 **2.3 接入自定义 Agent**。内置 5 种 Agent（Claude Code 等）则无需配置，装好即自动识别（见 2.1）。
 
 **Q2：创建面板后终端是空白的/没有反应？**
 Mexus 用 Shell 套壳启动（约 800ms 后发送命令）。等待几秒；检查项目目录是否有读写权限；Windows 下确认默认 shell 配置（全局配置 `defaults.shell`，如 `C:\Program Files\Git\bin\bash.exe`）。
